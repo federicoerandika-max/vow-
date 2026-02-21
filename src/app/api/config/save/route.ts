@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from 'next/server';
 import { saveWeddingConfig } from '@/config/loader';
 import { WeddingConfig } from '@/types/wedding';
