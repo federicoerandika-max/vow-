@@ -83,3 +83,42 @@ export async function saveWeddingConfig(coupleId: string, config: WeddingConfig)
     token: process.env.BLOB_READ_WRITE_TOKEN,
   });
 }
+
+/**
+ * Find a wedding config by couple slug (e.g. "erandika-federico").
+ * Searches all configs for one whose metadata.coupleSlug matches,
+ * or whose couple.names match the slug parts.
+ */
+export async function getWeddingConfigBySlug(slug: string): Promise<WeddingConfig | null> {
+  const decodedSlug = decodeURIComponent(slug).toLowerCase();
+
+  // Try all configs
+  const ids = await getAllWeddingConfigs();
+  for (const id of ids) {
+    try {
+      const config = await getWeddingConfig(id);
+
+      // Check explicit coupleSlug in metadata
+      if (config.metadata?.coupleSlug) {
+        const configSlug = config.metadata.coupleSlug.toLowerCase();
+        if (configSlug === decodedSlug) return config;
+      }
+
+      // Fallback: match against couple names with various separators
+      if (config.couple?.names) {
+        const [n1, n2] = config.couple.names.map(n => n.toLowerCase().trim());
+        const slugVariants = [
+          `${n1}-${n2}`, `${n2}-${n1}`,
+          `${n1}${n2}`, `${n2}${n1}`,
+          `${n1}&${n2}`, `${n2}&${n1}`,
+          `${n1}_${n2}`, `${n2}_${n1}`,
+        ];
+        if (slugVariants.includes(decodedSlug)) return config;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}

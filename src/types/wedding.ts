@@ -49,6 +49,7 @@ export interface Metadata {
   siteName?: string;
   ogImage?: string;
   ogUrl?: string;
+  coupleSlug?: string;
 }
 
 export interface WeddingConfig {

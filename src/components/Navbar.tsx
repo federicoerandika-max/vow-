@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { WeddingConfig } from '@/types/wedding';
 import { getMergedTranslations } from '@/utils/translations';
+import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 
 interface NavbarProps {
   videoSkipped: boolean;
@@ -35,12 +36,14 @@ export default function Navbar({ videoSkipped, config }: NavbarProps) {
     // For hash links, default <a> behaviour handles scrolling
   };
 
+  const postCountdown = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
+
   const navItems = [
     { href: '#countdownTitle', action: 'countdown', icon: '⏳', label: t.navCountdown as string },
     { href: '#formTitle', action: 'rsvp', icon: '📝', label: t.navRsvp as string },
-    { href: '#instagramShare', action: 'instagram', icon: '📸', label: t.navInstagram as string },
+    ...(postCountdown ? [{ href: '#instagramShare', action: 'instagram', icon: '📸', label: t.navInstagram as string }] : []),
     { href: '#info-buttons', action: 'location', icon: '📍', label: t.navLocation as string },
-    { href: '#', action: 'timeline', icon: '🕒', label: t.navTimeline as string },
+    ...(postCountdown ? [{ href: '#', action: 'timeline', icon: '🕒', label: t.navTimeline as string }] : []),
     { href: '#', action: 'gift', icon: '🎁', label: t.navGift as string },
   ];
 

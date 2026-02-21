@@ -87,8 +87,10 @@ export default function AdminPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<Section>('couple');
   const [uploadingVideo, setUploadingVideo] = useState<'it' | 'en' | null>(null);
+  const [uploadingOgImage, setUploadingOgImage] = useState(false);
   const [translationLang, setTranslationLang] = useState<'it' | 'en'>('it');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const ogImageInputRef = useRef<HTMLInputElement>(null);
 
   /* ── auth ── */
   useEffect(() => {
@@ -216,6 +218,35 @@ export default function AdminPage() {
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) { setError(err.message); }
     finally { setUploadingVideo(null); }
+  };
+
+  /* ── OG image upload ── */
+  const handleOgImageUpload = async (file: File) => {
+    if (!token) return;
+    setUploadingOgImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('coupleId', selectedConfig);
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      set('metadata.ogImage', data.url);
+      setSuccess('OG Image uploaded ✓');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err: any) { setError(err.message); }
+    finally { setUploadingOgImage(false); }
+  };
+
+  /* ── auto-generate couple slug ── */
+  const generateCoupleSlug = () => {
+    if (!config?.couple?.names) return '';
+    const [n1, n2] = config.couple.names;
+    return `${n1.toLowerCase().trim()}-${n2.toLowerCase().trim()}`;
   };
 
   /* ── timeline helpers ── */
@@ -511,18 +542,122 @@ export default function AdminPage() {
         </p>
         <div style={S.grid}>
           {renderField('Site Name', 'metadata.siteName', { placeholder: 'Wedding Day 💍' })}
-          {renderField('OG Image URL', 'metadata.ogImage', { type: 'url', placeholder: 'https://example.com/preview.jpg' })}
-          {renderField('OG URL', 'metadata.ogUrl', { type: 'url', placeholder: 'https://yoursite.com' })}
+
+          {/* Couple Slug */}
+          <div style={{ ...S.field, gridColumn: '1 / -1' }}>
+            <label style={S.label}>Couple URL Slug</label>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <input
+                type="text"
+                value={get('metadata.coupleSlug', '')}
+                onChange={(e) => set('metadata.coupleSlug', e.target.value)}
+                placeholder={generateCoupleSlug() || 'name1-name2'}
+                style={{ ...S.input, flex: 1 }}
+              />
+              <button
+                type="button"
+                style={S.btnSecondary}
+                onClick={() => set('metadata.coupleSlug', generateCoupleSlug())}
+              >
+                Auto-generate
+              </button>
+            </div>
+            <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
+              Your wedding URL will be: <strong>/vow/{get('metadata.coupleSlug') || generateCoupleSlug() || 'name1-name2'}</strong>
+            </p>
+          </div>
+
+          {/* OG URL (auto-generated) */}
+          <div style={{ ...S.field, gridColumn: '1 / -1' }}>
+            <label style={S.label}>OG URL (auto-generated from slug)</label>
+            <input
+              type="url"
+              value={get('metadata.ogUrl', '')}
+              onChange={(e) => set('metadata.ogUrl', e.target.value)}
+              placeholder={`https://vow-sandy.vercel.app/vow/${get('metadata.coupleSlug') || generateCoupleSlug()}`}
+              style={S.input}
+            />
+            <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
+              Leave empty to auto-generate from slug. Override only if you have a custom domain.
+            </p>
+          </div>
+
+          {/* OG Image — URL or Upload */}
+          <div style={{ ...S.field, gridColumn: '1 / -1' }}>
+            <label style={S.label}>OG Image</label>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
+              <input
+                type="url"
+                value={get('metadata.ogImage', '')}
+                onChange={(e) => set('metadata.ogImage', e.target.value)}
+                placeholder="https://example.com/preview.jpg"
+                style={{ ...S.input, flex: 1 }}
+              />
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <input
+                ref={ogImageInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleOgImageUpload(f);
+                  e.target.value = '';
+                }}
+              />
+              <button
+                type="button"
+                style={S.btnSecondary}
+                onClick={() => ogImageInputRef.current?.click()}
+                disabled={uploadingOgImage}
+              >
+                {uploadingOgImage ? '⏳ Uploading…' : '📤 Upload Image'}
+              </button>
+              <span style={{ fontSize: 12, color: '#9ca3af' }}>JPG, PNG, WebP, GIF — max 5MB</span>
+            </div>
+          </div>
         </div>
+
         {get('metadata.ogImage') && (
           <div style={{ marginTop: 16, padding: 12, background: '#f9fafb', borderRadius: 8, textAlign: 'center' }}>
             <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>OG Image Preview:</p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={get('metadata.ogImage')}
               alt="OG preview"
               style={{ maxWidth: '100%', maxHeight: 200, borderRadius: 8, border: '1px solid #e5e7eb' }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
+          </div>
+        )}
+
+        {/* Preview Card */}
+        {(get('metadata.siteName') || get('metadata.ogImage')) && (
+          <div style={{ marginTop: 16, padding: 16, background: '#f0f9ff', borderRadius: 8, border: '1px solid #bfdbfe' }}>
+            <p style={{ fontSize: 12, color: '#2563eb', fontWeight: 600, marginBottom: 8 }}>📱 Social Preview:</p>
+            <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #e5e7eb', maxWidth: 400, margin: '0 auto', textAlign: 'left' }}>
+              {get('metadata.ogImage') && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={get('metadata.ogImage')}
+                  alt="Social preview"
+                  style={{ width: '100%', height: 200, objectFit: 'cover' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              )}
+              <div style={{ padding: 12 }}>
+                <p style={{ fontSize: 11, color: '#9ca3af', margin: 0 }}>
+                  {get('metadata.ogUrl') || `vow-sandy.vercel.app/vow/${get('metadata.coupleSlug') || '...'}`}
+                </p>
+                <p style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a', margin: '4px 0 2px' }}>
+                  {get('metadata.siteName') || 'Wedding Day 💍'}
+                </p>
+                <p style={{ fontSize: 12, color: '#6b7280', margin: 0 }}>
+                  Save the date for {config?.couple?.names?.join(' & ')}&apos;s wedding!
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>
