@@ -1,6 +1,6 @@
 import { Translations } from '@/types/wedding';
 
-export const translations: Record<'it' | 'en', Translations> = {
+export const translations: Record<string, Translations> = {
   it: {
     title: "Ci sposiamo 💍",
     countdownTitle: "Countdown al grande giorno",
@@ -31,7 +31,7 @@ export const translations: Record<'it' | 'en', Translations> = {
     copy: "Tocca per copiare",
     closeButton: 'Chiudi',
     name: "INTESTATARIO:",
-    footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
+    footer: "© 2026 — Sito realizzato con amore da<br><strong>Vow</strong>",
     tagAdvice: `taggaci`,
     shareOnInstagram: "Condividi su Instagram 📸",
     publishedPhotos: `
@@ -45,9 +45,15 @@ export const translations: Record<'it' | 'en', Translations> = {
     `,
     formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
     timeline: 'Segui la Timeline dell\'evento 🕒',
+    navCouple: 'Coppia',
+    navLocation: 'Location',
+    navCountdown: 'Countdown',
+    navRsvp: 'RSVP',
+    navTimeline: 'Timeline',
     navGift: 'Un pensiero per noi 🎁',
     navFAQ: 'Domande frequenti',
-    navWedshoots: 'Portati avanti e scarica Wedshoots',
+    navInstagram: 'Instagram',
+    navWedShoots: '📸 WedShoots',
     backHome: "← Home",
     programTitle: "Programma della giornata",
     programIntro: "Qui trovi una timeline semplice per sapere sempre cosa sta succedendo (orari indicativi).",
@@ -109,7 +115,7 @@ export const translations: Record<'it' | 'en', Translations> = {
     copy: "Click to copy",
     closeButton: 'Close',
     name: "ACCOUNT HOLDER:",
-    footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>",
+    footer: "© 2026 — Website lovingly crafted by<br><strong>Vow</strong>",
     tagAdvice: `tag us`,
     shareOnInstagram: "Share on Instagram 📸",
     publishedPhotos: `
@@ -123,9 +129,15 @@ export const translations: Record<'it' | 'en', Translations> = {
     `,
     formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
     timeline: 'Follow the timeline of the event 🕒',
+    navCouple: 'Couple',
+    navLocation: 'Location',
+    navCountdown: 'Countdown',
+    navRsvp: 'RSVP',
+    navTimeline: 'Timeline',
     navGift: 'A little thought for us 🎁',
     navFAQ: 'Frequently asked questions',
-    navWedshoots: 'Get ahead and download Wedshoots',
+    navInstagram: 'Instagram',
+    navWedShoots: '📸 WedShoots',
     backHome: "← Home",
     programTitle: "Day schedule",
     programIntro: "A simple timeline to always know what's happening (approx. times).",
@@ -157,3 +169,68 @@ export const translations: Record<'it' | 'en', Translations> = {
     nextEnd: "Next: end of party"
   }
 };
+
+export interface TranslationStrings {
+  title: string;
+  countdownTitle: string;
+  formTitle: string;
+  location: string;
+  date: string;
+  intro: string;
+  futureUpdates: string;
+  addHomeTitle: string;
+  addHomeIntro: string;
+  iosSteps: string;
+  androidSteps: string;
+  signature: string;
+  btnLocation: string;
+  btnDate: string;
+  btnGift: string;
+  giftTitle: string;
+  giftText: string;
+  iban: string;
+  copy: string;
+  closeButton: string;
+  name: string;
+  footer: string;
+  tagAdvice: string;
+  shareOnInstagram: string;
+  publishedPhotos: string;
+  hashtagGalleryTitle: string;
+  wedshoots_btn: string;
+  formRevealed: string;
+  timeline: string;
+  navGift: string;
+  navFAQ: string;
+  navInstagram: string;
+  navWedShoots: string;
+  backHome: string;
+  programTitle: string;
+  programIntro: string;
+  nowLabel: string;
+  nextPrefix: string;
+  timelineTitle: string;
+  e_takeSeat: string;
+  e_takeSeat_d: string;
+  e_ceremony: string;
+  e_ceremony_d: string;
+  e_lamp: string;
+  e_lamp_d: string;
+  e_aperitif: string;
+  e_aperitif_d: string;
+  e_room: string;
+  e_room_d: string;
+  e_dinner: string;
+  e_dinner_d: string;
+  e_speeches: string;
+  e_speeches_d: string;
+  e_cake: string;
+  e_cake_d: string;
+  e_sweets: string;
+  e_sweets_d: string;
+  e_party: string;
+  e_party_d: string;
+  copied: string;
+  waiting: string;
+  nextEnd: string;
+}

@@ -1,72 +1,81 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useLanguage } from '@/hooks/useLanguage';
-import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
-import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
+import { getMergedTranslations } from '@/utils/translations';
 
 interface NavbarProps {
+  videoSkipped: boolean;
   config: WeddingConfig;
-  videoSkipped?: boolean;
 }
 
-export default function Navbar({ config, videoSkipped = false }: NavbarProps) {
-  const [language] = useLanguage();
+export default function Navbar({ videoSkipped, config }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(videoSkipped);
+  const [isVisible, setIsVisible] = useState(false);
+  const [language] = useLanguage();
   const t = getMergedTranslations(language, config);
 
   useEffect(() => {
-    // Navbar only becomes visible when the video has ended / been skipped
     if (videoSkipped) {
       setIsVisible(true);
+    } else {
+      setIsVisible(false);
     }
   }, [videoSkipped]);
 
-  const showTimeline = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
-  const coupleNames = config.couple.names.join(' & ');
+  const handleNavClick = (action: string) => {
+    setIsOpen(false);
+    if (action === 'gift') {
+      // Open the gift sheet overlay
+      window.dispatchEvent(new CustomEvent('openGiftSheet'));
+    } else if (action === 'timeline') {
+      window.location.href = '/timeline';
+    }
+    // For hash links, default <a> behaviour handles scrolling
+  };
+
+  const navItems = [
+    { href: '#countdownTitle', action: 'countdown', icon: '⏳', label: t.navCountdown as string },
+    { href: '#formTitle', action: 'rsvp', icon: '📝', label: t.navRsvp as string },
+    { href: '#instagramShare', action: 'instagram', icon: '📸', label: t.navInstagram as string },
+    { href: '#info-buttons', action: 'location', icon: '📍', label: t.navLocation as string },
+    { href: '#', action: 'timeline', icon: '🕒', label: t.navTimeline as string },
+    { href: '#', action: 'gift', icon: '🎁', label: t.navGift as string },
+  ];
 
   return (
-    <header className={`navbar ${isVisible ? '' : 'hidden'}`}>
+    <nav className={`navbar ${isVisible ? '' : 'hidden'}`}>
       <div className="nav-container">
-        <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)}>
-          {coupleNames}
-        </Link>
+        <a href="#title" className="nav-logo">
+          <img src="/assets/img/vowlogo.png" alt="Vow" className="nav-logo-img" />
+        </a>
         <button
           className={`nav-toggle ${isOpen ? 'active' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
-          aria-label="Menu"
-          aria-expanded={isOpen}
+          aria-label="Toggle menu"
         >
           {isOpen ? '✕' : '☰'}
         </button>
+        <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+          {navItems.map(item => (
+            <li key={item.action}>
+              <a
+                href={item.href}
+                onClick={(e) => {
+                  if (item.action === 'gift' || item.action === 'timeline') {
+                    e.preventDefault();
+                  }
+                  handleNavClick(item.action);
+                }}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
-      <nav className={`nav-links ${isOpen ? 'open' : ''}`}>
-        <Link href="/" className="nav-link" onClick={() => setIsOpen(false)}>
-          Home
-        </Link>
-        {showTimeline && (
-          <Link href="/timeline" className="nav-link navTimeline" onClick={() => setIsOpen(false)}>
-            {t.timeline as string}
-          </Link>
-        )}
-        <Link href="/gift" className="nav-link" onClick={() => setIsOpen(false)}>
-          {t.navGift as string}
-        </Link>
-        {config.couple.wedshoots && (
-          <a
-            href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1"
-            className="nav-link last"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsOpen(false)}
-          >
-            <span dangerouslySetInnerHTML={{ __html: t.navWedshoots as string }}></span>
-          </a>
-        )}
-      </nav>
-    </header>
+    </nav>
   );
 }

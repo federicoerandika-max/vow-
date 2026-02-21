@@ -434,10 +434,20 @@ button#closeButton {
 }
 
 .nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  color: #333;
+  padding: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.nav-logo-img {
+  height: 32px;
+  width: auto;
+  display: block;
 }
 
 .nav-toggle {
@@ -468,6 +478,7 @@ button#closeButton {
 }
 
 .nav-links {
+  list-style: none;
   position: absolute;
   top: 100%;
   left: 0;
@@ -479,6 +490,7 @@ button#closeButton {
   overflow: hidden;
   max-height: 0;
   padding: 0 12px;
+  margin: 0;
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -491,38 +503,48 @@ button#closeButton {
   padding: 12px;
 }
 
-.nav-link {
-  display: inline-block;
-  padding: 10px 16px;
+.nav-links li {
+  list-style: none;
+  width: 100%;
+  text-align: center;
+}
+
+.nav-links li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  margin: 4px 0;
   text-decoration: none;
   color: #555;
-  border-top: 1px solid rgba(0,0,0,0.03);
   border-radius: 10px;
-  margin: 6px 0;
-  width: auto;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  font-size: 0.92rem;
+  font-weight: 500;
   transition: transform .14s ease, box-shadow .18s ease, background .18s ease, color .12s ease;
 }
 
-.nav-link:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.09);
+.nav-links li a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
   color: #222;
+  background: #fff;
 }
 
-.nav-link:active {
-  transform: translateY(0) scale(.995);
+.nav-links li a:active {
+  transform: translateY(0) scale(.98);
 }
 
-.nav-link:focus-visible {
-  outline: 3px solid rgba(34,34,34,0.08);
-  outline-offset: 4px;
+.nav-icon {
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 @media (max-width: 768px) {
-  .nav-link {
-    margin-bottom: 25px;
+  .nav-links li a {
+    margin-bottom: 2px;
   }
 }
 
@@ -540,7 +562,7 @@ button#closeButton {
     max-height: none;
     flex-direction: row;
     justify-content: center;
-    gap: 24px;
+    gap: 8px;
     padding: 10px 0;
     background: transparent;
     box-shadow: none;
@@ -548,12 +570,23 @@ button#closeButton {
     align-items: baseline;
   }
 
-  .nav-link {
+  .nav-links li {
+    width: auto;
+  }
+
+  .nav-links li a {
     border: none;
     padding: 8px 12px;
     margin: 0;
     background: transparent;
     box-shadow: none;
+    font-size: 0.85rem;
+  }
+
+  .nav-links li a:hover {
+    background: rgba(0,0,0,0.04);
+    box-shadow: none;
+    transform: none;
   }
 }
 
@@ -603,4 +636,99 @@ button#closeButton {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ── Add to Home Screen ── */
+.add-to-home {
+  margin: 33px;
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 36px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.add-to-home h2 {
+  font-family: 'Playfair Display', serif;
+  margin-top: 0;
+}
+
+/* ── Instagram Share ── */
+.instagram-share {
+  margin: 40px auto 20px;
+  text-align: center;
+}
+
+.ig-button {
+  padding: 14px 28px;
+  font-size: 1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ig-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.2);
+}
+
+.action-btn {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 14px 28px;
+  font-size: 0.95rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+}
+
+/* ── Hashtag Gallery ── */
+.hashtag-gallery {
+  margin: 60px auto;
+  text-align: center;
+  max-width: 900px;
+}
+
+.hashtag-gallery h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.hashtag-gallery p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* ── Timeline Button ── */
+.btn-timeline button {
+  border: none;
+  background: #fff;
+  padding: 14px 22px;
+  border-radius: 30px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-timeline button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.14);
 }

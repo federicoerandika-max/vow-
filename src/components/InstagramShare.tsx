@@ -2,6 +2,7 @@
 
 import { useLanguage } from '@/hooks/useLanguage';
 import { getMergedTranslations } from '@/utils/translations';
+import { copyToClipboard } from '@/utils/clipboard';
 import { WeddingConfig } from '@/types/wedding';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
@@ -30,9 +31,9 @@ export default function InstagramShare({ config }: InstagramShareProps) {
     }
   };
 
-  const onClickShareAPhoto = () => {
+  const onClickShareAPhoto = async () => {
     if (config.couple.wedshoots) {
-      navigator.clipboard.writeText(config.couple.wedshoots.code);
+      await copyToClipboard(config.couple.wedshoots.code);
       if ('vibrate' in navigator) {
         navigator.vibrate([150, 80, 150]);
       }

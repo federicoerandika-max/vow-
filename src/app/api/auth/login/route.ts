@@ -2,7 +2,6 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 // Read plain-text admin password from env, or default to 'admin'

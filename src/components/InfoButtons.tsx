@@ -54,7 +54,7 @@ export default function InfoButtons({ config }: InfoButtonsProps) {
         {showTimeline && (
           <div className="btn-timeline">
             <button onClick={() => window.location.href = '/timeline'}>
-              <span>{t.timeline as string}</span>
+              🕒 <span>{t.timeline as string}</span>
             </button>
             <br />
           </div>

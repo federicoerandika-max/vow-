@@ -14,6 +14,8 @@ import RSVPForm from '@/components/RSVPForm';
 import InstagramShare from '@/components/InstagramShare';
 import InfoButtons from '@/components/InfoButtons';
 import GiftSheet from '@/components/GiftSheet';
+import AddToHome from '@/components/AddToHome';
+import HashtagGallery from '@/components/HashtagGallery';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 export default function HomePage() {
@@ -23,6 +25,7 @@ export default function HomePage() {
   const [showVideo, setShowVideo] = useState(true);
   const [giftSheetOpen, setGiftSheetOpen] = useState(false);
   const [langSwitchFlash, setLangSwitchFlash] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const langVideoRef = useRef<HTMLVideoElement>(null);
 
   const triggerLangVideoFlash = () => {
@@ -95,6 +98,23 @@ export default function HomePage() {
       window.removeEventListener('languagechange', handleLanguageChange);
     };
   }, [setLanguage]);
+
+  useEffect(() => {
+    // Allow bypassing countdown for local testing
+    if (process.env.NEXT_PUBLIC_BYPASS_COUNTDOWN === 'true') {
+      setShowContent(true);
+      return;
+    }
+
+    if (!config) return;
+    if (config.couple.formEndingDate) {
+      const endDate = new Date(config.couple.formEndingDate);
+      const now = new Date();
+      if (now >= endDate) {
+        setShowContent(true);
+      }
+    }
+  }, [config]);
 
   if (!config) {
     return <div>Loading...</div>;
@@ -176,22 +196,26 @@ export default function HomePage() {
         <InstagramShare config={config} />
 
         <InfoButtons config={config} />
+
+        <HashtagGallery config={config} />
+
+        <AddToHome config={config} />
+
+        <GiftSheet
+          config={config}
+          isOpen={giftSheetOpen}
+          onClose={() => setGiftSheetOpen(false)}
+        />
+
+        <AnimateOnScroll animation="fade-up">
+          <footer className="site-footer" id="footer">
+            <p
+              id="footerText"
+              dangerouslySetInnerHTML={{ __html: T.footer as string }}
+            ></p>
+          </footer>
+        </AnimateOnScroll>
       </div>
-
-      <GiftSheet
-        config={config}
-        isOpen={giftSheetOpen}
-        onClose={() => setGiftSheetOpen(false)}
-      />
-
-      <AnimateOnScroll animation="fade-up">
-        <footer className="site-footer" id="footer">
-          <p
-            id="footerText"
-            dangerouslySetInnerHTML={{ __html: T.footer as string }}
-          ></p>
-        </footer>
-      </AnimateOnScroll>
 
       {/* Language switch fullscreen video flash */}
       <div className={`lang-video-flash ${langSwitchFlash ? 'active' : ''}`}>
