@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Un pensiero per noi 🎁</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: #faf7f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 20px;
+        }
+
+        .iban {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 16px;
+            background: #f6f3f0;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+            cursor: pointer;
+            transition: transform .15s ease, background .15s ease;
+        }
+
+        iban:active {
+            transform: scale(0.97);
+            background: #ece7e2;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #giftSheet {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            z-index: 2000;
+        }
+
+        #giftSheet.active {
+            display: block;
+        }
+
+        .sheet-content {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #faf7f4;
+            border-radius: 24px 24px 0 0;
+            padding: 30px 20px;
+            animation: slideUp .4s ease;
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: #ccc;
+            border-radius: 10px;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1 id="title"></h1>
+        <p id="text"></p>
+
+        <div class="iban" onclick="copyName()">
+            <span id="nameText"></span><br>
+            <small id="copyHintName"></small>
+        </div>
+        <div class="iban" onclick="copyIBAN()">
+            <span id="ibanText"></span><br>
+            <small id="copyHintIBAN"></small>
+        </div>
+
+
+        <a href="../index.html" id="back"></a>
+    </div>
+
+    <script>
+        const lang = (localStorage.getItem('lang') ||
+            (navigator.language || '').startsWith('en') ? 'en' : 'it');
+
+        const t = {
+            it: {
+                title: "Un pensiero per noi 🎁",
+                text: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
+                iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
+                back: "Home",
+                copy: "Tocca per copiare",
+                giftTitle: "Un pensiero per noi 🎁",
+                name: "INTESTATARIO: FEDERICO HARIN ATTYGALA"
+            },
+            en: {
+                title: "A little thought for us 🎁",
+                text: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
+                iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
+                back: "Home",
+                copy: "Click to copy",
+                giftTitle: "A little thought for us 🎁",
+                name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA"
+            }
+        };
+
+        document.getElementById('title').innerHTML = t[lang].title;
+        document.getElementById('text').innerHTML = t[lang].text;
+        document.getElementById('back').innerHTML = t[lang].back;
+        document.getElementById('ibanText').innerText = t[lang].iban;
+        document.getElementById('copyHintIBAN').innerHTML = t[lang].copy;
+        document.getElementById('nameText').innerHTML = t[lang].name;
+        document.getElementById('copyHintName').innerHTML = t[lang].copy;
+
+
+
+        
+        function copyIBAN() {
+            const text = document.getElementById('ibanText').innerText;
+
+            navigator.clipboard.writeText(text.replace(' ', '').replace('IBAN:', ''));
+
+            const hint = document.getElementById('copyHintIBAN');
+            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+            setTimeout(() => {
+                hint.innerHTML = lang === 'it'
+                    ? 'Tocca per copiare'
+                    : 'Tap to copy';
+            }, 2000);
+        }
+
+        
+        function copyName() {
+            const text = document.getElementById('nameText').innerText;
+
+            navigator.clipboard.writeText((lang === 'it') ? text.replace('INTESTATARIO: ', '') : text.replace('ACCOUNT HOLDER: ', ''));
+
+            const hint = document.getElementById('copyHintName');
+            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+            setTimeout(() => {
+                hint.innerHTML = lang === 'it'
+                    ? 'Tocca per copiare'
+                    : 'Tap to copy';
+            }, 2000);
+        }
+
+        function openGift() {
+            if (window.innerWidth < 768) {
+                document.getElementById('giftSheet').classList.add('active');
+            } else {
+                window.location.href = "gift.html";
+            }
+        }
+
+        function closeGiftSheet() {
+            document.getElementById('giftSheet').classList.remove('active');
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Grazie ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      background:#faf7f4;
+      font-family:'Montserrat', sans-serif;
+      text-align:center;
+      padding:20px;
+    }
+    h1 {
+      font-family:'Playfair Display', serif;
+    }
+    a {
+      display:inline-block;
+      margin-top:30px;
+      padding:12px 24px;
+      background:#fff;
+      border-radius:30px;
+      text-decoration:none;
+      color:#333;
+      box-shadow:0 5px 15px rgba(0,0,0,.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <h1 id="title"></h1>
+    <p id="text"></p>
+    <a href="https://federicoerandika-max.github.io/weddingDay/" id="back"></a>
+  </div>
+
+<script>
+const lang = (navigator.language || '').startsWith('en') ? 'en' : 'it';
+
+const t = {
+  it: {
+    title: "Grazie di cuore ❤️",
+    text: "Abbiamo ricevuto la tua conferma. Non vediamo l’ora di festeggiare insieme!",
+    back: "Torna al sito"
+  },
+  en: {
+    title: "Thank you ❤️",
+    text: "We’ve received your confirmation. We can’t wait to celebrate together!",
+    back: "Back to the website"
+  }
+};
+
+document.getElementById('title').innerHTML = t[lang].title;
+document.getElementById('text').innerHTML = t[lang].text;
+document.getElementById('back').innerHTML = t[lang].back;
+</script>
+</body>
+</html>

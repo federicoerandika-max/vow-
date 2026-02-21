@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Wedding Day 💍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/img/wedding-logo.png">
+  <link rel="apple-touch-icon" href="assets/img/wedding-logo.png">
+  <meta property="og:title" content="Save the date, here we are! Erandika & Federico 💍">
+  <meta property="og:description" content="Scopri tutti i dettagli e conferma la tua presenza">
+  <meta property="og:image" content="https://federicoerandika-max.github.io/weddingDay/preview.jpg">
+  <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay-test">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/future-updates.css">
+  <link rel="stylesheet" href="assets/css/photo-share.css">
+  <link rel="stylesheet" href="assets/css/gallery.css">
+  <link rel="stylesheet" href="assets/css/navbarstyles.css">
+  
+  <style>
+    [data-aos] {
+      transition-property: transform, opacity;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #faf7f4;
+      color: #333;
+      text-align: center;
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .lang-switch {
+      margin-bottom: 15px;
+    }
+
+    .lang-switch button {
+      border: none;
+      background: white;
+      padding: 8px 14px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .video-wrapper {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 16px;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      display: none;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .tooltip.location {
+      top: 8%;
+      left: 5%;
+    }
+
+    .tooltip.date {
+      bottom: 8%;
+      right: 5%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .countdown div {
+      background: white;
+      padding: 15px;
+      border-radius: 14px;
+      min-width: 70px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    iframe {
+      width: 100%;
+      min-height: 900px;
+      border: none;
+      border-radius: 20px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .tooltip.location { top: 10%; left: 5%; }
+      .tooltip.date { bottom: 10%; right: 5%; }
+      .countdown {
+        gap: 10px;
+      }
+    
+      .countdown div {
+        padding: 12px;
+        min-width: 60px;
+        font-size: 14px;
+      }
+    }
+
+    #intro {
+      max-width: 700px;
+      margin: auto;
+      font-size: 16px;
+    }
+
+    #addToHome, #iosSteps, #androidSteps {
+      font-size: 13px;
+      padding: 5%;
+    }
+
+    #signature {
+      margin-top: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: #444;
+      opacity: 0.9;
+    }
+
+    #signature::before {
+      content: "— ";
+    }
+
+    #signature::after {
+      content: " —";
+    }
+
+    @media (max-width: 600px) {
+      #signature {
+        font-size: 22px;
+      }
+      
+
+      iframe {
+        min-height: 1980px;
+      }
+    }
+
+    body.lock-scroll {
+      overflow: hidden;
+    }
+
+    .video-wrapper.fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      border-radius: 0;
+    }
+
+    .video-wrapper.fullscreen video {
+      height: 100vh;
+      object-fit: contain;
+      background: white;
+      border-radius: 0;
+    }
+
+    .info-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 40px 0;
+    }
+
+    .info-buttons button {
+      border: none;
+      background: white;
+      padding: 14px 22px;
+      border-radius: 30px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    @keyframes videoExit {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: scale(0.92);
+        opacity: 0;
+      }
+    }
+
+    .video-wrapper.exit {
+      animation: videoExit 1s ease forwards;
+    }
+
+    .iban, .name {
+        margin: 25px 0;
+        padding: 20px;
+        border-radius: 16px;
+        background: #f6f3f0;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        word-break: break-all;
+        cursor: pointer;
+        transition: transform .15s ease, background .15s ease;
+    }
+
+    iban:active {
+        transform: scale(0.97);
+        background: #ece7e2;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 12px 24px;
+        border-radius: 30px;
+        background: #fff;
+        color: #333;
+        text-decoration: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #giftSheet {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 2000;
+    }
+
+    #giftSheet.active {
+      display: block;
+    }
+
+    .sheet-content {
+      position: absolute;
+      bottom: 0;
+      width: 90%;
+      background: #faf7f4;
+      border-radius: 24px 24px 0 0;
+      padding: 30px 20px;
+      animation: slideUp .4s ease;
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      background: #ccc;
+      border-radius: 10px;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    button#closeButton {
+      background: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid white;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .sheet-content {
+      transition: transform 0.35s ease;
+      touch-action: none;
+    }
+
+    #giftSheet.closing .sheet-content {
+      transform: translateY(100%);
+    }
+
+    .sheet-handle {
+      animation: handlePulse 2s infinite;
+    }
+
+    @keyframes handlePulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    #giftSheet {
+      pointer-events: none;
+    }
+
+    #giftSheet.active {
+      pointer-events: auto;
+    }
+    
+    .site-footer {
+      margin-top: 80px;
+      padding: 30px 20px;
+      background: #f3eee9;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .site-footer strong {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .site-footer p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* animazioni in out */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all .6s ease;
+    }
+
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-out-down {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  </style>
+</head>
+
+<body>
+
+    <header class="navbar hidden" >
+        <div class="nav-container">
+          <a href="index.html" class="nav-logo">Federico & Erandika</a>
+      
+          <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            ☰
+          </button>
+        </div>
+      
+        <nav class="nav-links" id="navLinks">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline</a>
+          <a href="pages/gift.html" class="nav-link" id="navGift"></a>
+          <a href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1" class="nav-link last" id="navWedshoots"></a>
+          <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ"></a> -->
+        </nav>
+      </header>
+      
+
+<div class="container">
+
+  <!-- LANGUAGE SWITCH -->
+  <div class="lang-switch">
+    <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+    <button onclick="setLanguage('en')">🇬🇧 English</button>
+  </div>
+
+  <h1 id="title"></h1>
+
+  <!-- VIDEO -->
+  <div class="video-wrapper">
+    <video id="weddingVideo" autoplay muted playsinline>
+      <source id="videoSource" src="" type="video/mp4">
+    </video>
+
+    <div class="tooltip location" onclick="openMaps()">📍 <span id="locationLabel"></span></div>
+    <div class="tooltip date" onclick="addToCalendar()">
+      <img src="assets/img/june-11-calendar.png" alt="calendar icon" width="50" height="50" style="
+            border: none;
+            margin: -13px;
+            position: relative;
+            top: 4px;
+        "> <span id="dateLabel"></span>
+    </div>
+
+  </div>
+
+  <!-- COUNTDOWN -->
+  <h2 id="countdownTitle" data-aos="fade-up"></h2>
+  <div class="countdown" id="countdown" data-aos="zoom-in" data-aos-delay="300"></div>
+
+  <!-- TEXT -->
+  <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
+
+  <br><br>
+  <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
+    <span id="signatureText"></span>
+  </div>
+
+  <!-- FORM -->
+  <h2 id="formTitle" data-aos="fade-up"></h2>
+  <div id="moduleForm">
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true"
+      width="100%"
+      height="900"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0">
+    </iframe>
+  </div>
+  
+
+
+  <br>
+  <div class="future-updates" data-aos="fade-up" data-aos-delay="150">
+    <span class="future-icon">✨</span>
+    <p id="futureUpdates"></p>
+  </div>
+
+  <div id="instagramShare" class="instagram-share hidden" data-aos="zoom-in">
+    <p style="margin-top:12px; font-size:0.85rem; opacity:0.7;" id="tagAdvice">
+    </p>
+
+    <button class="ig-button" onclick="openInstagram()" id="shareOnInstagram">
+    </button>
+    <br>
+    <button id="wedshootsBtn"
+        class="action-btn"
+        data-i18n="wedshoots_btn" onclick="onClickShareAPhoto()">
+    </button>
+    <br>   
+  </div>
+
+  <div class="info-buttons fade-in-up" id="info-buttons">
+  <div id="btn-timeline" class="btn-timeline hidden">
+      <button onclick="window.location.href='pages/timeline.html'">
+        <span id="timeline"></span>
+      </button>
+      <br>
+    </div>
+    <button onclick="openMaps()">📍 <span id="btnLocation"></span></button>
+    <button onclick="addToCalendar()">
+      <img src="assets/img/june-11-calendar.png" alt="calendar icon" width="50" height="50" style="
+            border: none;
+            margin: -13px;
+            position: relative;
+            top: 4px;
+        "> <span id="btnDate"></span>
+    </button>
+    <button onclick="openGift()">🎁 <span id="btnGift"></span></button>
+  </div>
+</div>
+
+<section id="hashtagGallery" class="hashtag-gallery hidden" data-aos="fade-up">
+  <h3 id="hashtagGalleryTitle"></h3>
+  <p id="publishedPhotos">
+  </p>
+
+  <div class="gallery-embed">
+    <!-- iframe servizio hashtag qui -->
+  </div>
+</section>
+
+<section id="addToHome" data-aos="fade-up" style="margin: 33px;border: 1px solid;padding: 36px;">
+  <h2 id="addHomeTitle"></h2>
+
+  <div style="max-width:700px;margin:auto;font-size:15px;line-height:1.6;">
+    <p id="addHomeIntro"></p>
+
+    <div style="text-align:left;margin-top:20px;">
+      <p><strong>📱 iPhone (Safari)</strong><br>
+        <span id="iosSteps"></span>
+      </p>
+
+      <p><strong>🤖 Android (Chrome)</strong><br>
+        <span id="androidSteps"></span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  /* ================== TRANSITIONS ================== */
+  AOS.init({
+    duration: 900,
+    once: true,
+    easing: 'ease-out-cubic'
+  });
+</script>
+  
+<script>
+  
+  
+/* ================== TRANSLATIONS ================== */
+const translations = {
+  it: {
+    title: "Ci sposiamo 💍",
+    countdownTitle: "Countdown al grande giorno",
+    formTitle: "Conferma la tua presenza",
+    location: "Location",
+    date: "Salva la data",
+    intro: `
+        Ebbene sì… ci siamo!<br><br>
+        Dopo tanta (tantissima!) attesa, possiamo dirlo ad alta voce: <strong>ci sposiamo! 👰🏽‍♀️🤵🏾‍♂️</strong><br><br>
+        In questa pagina troverete un breve <strong>modulo da compilare</strong>, ci aiuterà a organizzare tutto al meglio
+        e a prenderci cura di ogni dettaglio, vi chiediamo solo di farci sapere <strong>entro il 30 marzo</strong>:<br><br>
+        Avervi accanto in questo giorno così importante per noi renderà tutto ancora più speciale.<br><br>
+        Non vediamo l’ora di festeggiare, emozionarci e vivere questo momento insieme a voi,
+        con le persone che amiamo davvero ❤️✨
+    `,
+    futureUpdates: "Seguiranno a breve ulteriori dettagli dell\'evento.",
+    addHomeTitle: "Aggiungi alla Home 📲",
+    addHomeIntro: "Puoi salvare questo sito come se fosse un’app sul tuo telefono.",
+    iosSteps: `Tocca il pulsante <strong>Condividi</strong> <img src="assets/img/share-apple.svg" alt="share icon" width="24" height="24" style="position: relative;top: 6px;" onclick="addToHome()"> → <strong>Aggiungi alla schermata Home</strong> → Conferma.`,
+    androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma.",
+    signature: "Erandika & Federico",
+    btnLocation: "Location",
+    btnDate: "Salva la data",
+    btnGift: "Se desiderate farci un regalo, il dono più grande per noi sarà avervi accanto. Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
+    giftTitle: "Un pensiero per noi 🎁",
+    giftText: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
+    iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
+    copy: "Tocca per copiare",
+    closeButton: 'Chiudi',
+    name: "INTESTATARIO: <br> HARIN FEDERICO ATTYGALA",
+    footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
+    tagAdvice: `taggaci <strong id="tagEra">@erandikaconthrath</strong> e <strong id="tagFede">@harinfederico</strong>`,
+    shareOnInstagram: "Condividi su Instagram 📸 ",
+    publishedPhotos: `
+      Tutte le foto verranno pubblicate con<br>
+      <strong>#ErandikaFedericoWedding2026</strong>
+    `,
+    hashtagGalleryTitle: "Momenti condivisi ❤️",
+    wedshoots_btn: `
+      Condividi i tuoi scatti 📸<br>
+      <small> (il codice è già copiato dovrai solo incollarlo) </small>
+    `,
+    formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
+    timeline: 'Segui la Timeline dell\'evento 🕒',
+    navGift: 'Un pensiero per noi 🎁',
+    navFAQ: 'Domande frequenti',
+    navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">'
+  },
+  en: {
+    title: "We’re getting married 💍",
+    countdownTitle: "Countdown to the big day",
+    formTitle: "RSVP",
+    location: "Location",
+    date: "Save the date",
+    intro: `
+      Here we are… it’s finally happening!<br><br>
+      After so much (so, so much!) waiting, we can finally say it out loud:
+      <strong>we’re getting married! 👰🏽‍♀️🤵🏾‍♂️</strong><br><br>
+      On this page you’ll find a <strong>short form to fill out</strong> — it will help us organize everything
+      as smoothly as possible and take care of all the little details, please let us know <strong>by March 30th</strong>:<br><br>
+      Having you by our side on such an important day will make it even more special.<br><br>
+      We can’t wait to celebrate, get emotional, and share this moment with you,
+      with the people we truly love ❤️✨
+    `,
+    futureUpdates: "Stay tuned for more updates regarding the event.",
+    addHomeTitle: "Add to Home Screen 📲",
+    addHomeIntro: "You can save this website like an app on your phone.",
+    iosSteps: `Tap <strong>Share</strong> <img src="assets/img/share-apple.svg" alt="share icon" width="24" height="24" style="position: relative;top: 6px;" onclick="addToHome()"> → <strong>Add to Home Screen</strong> → Confirm.`,
+    androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm.",
+    signature: "Erandika & Federico",
+    btnLocation: "Location",
+    btnDate: "Save the date",
+    btnGift: "Having you with us is the greatest gift. For those who wish, here you’ll find the details for a small, heartfelt thought ❤️",
+    giftTitle: "A little thought for us 🎁",
+    giftText: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
+    iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
+    copy: "Click to copy",
+    closeButton: 'Close',
+    name: "ACCOUNT HOLDER: <br> HARIN FEDERICO ATTYGALA",
+    footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>",
+    tagAdvice: `tag us <strong id="tagEra">@erandikaconthrath</strong> & <strong id="tagFede">@harinfederico</strong>`,
+    shareOnInstagram: "Share on Instagram 📸",
+    publishedPhotos: `
+      All the photos will be shared with<br>
+      <strong>#ErandikaFedericoWedding2026</strong>
+    `,
+    hashtagGalleryTitle: "Shared moments ❤️",
+    wedshoots_btn: `
+        Share your photos 📸<br>
+        <small> (the code is already copied, you just need to paste it) </small>
+    `,
+    formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
+    timeline: 'Follow the timeline of the event 🕒',
+    navGift: 'A little thought for us 🎁',
+    navFAQ: 'Frequently asked questions',
+    navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">'
+  },
+  
+};
+
+var globalLanguage = {};
+
+/* ================== LANGUAGE ================== */
+function detectLanguage() {
+  const saved = localStorage.getItem('lang');
+  if (saved) return saved;
+
+  const browserLang = navigator.language || navigator.userLanguage;
+  return browserLang.startsWith('en') ? 'en' : 'it';
+}
+
+function setLanguage(lang) {
+  document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'none')
+  localStorage.setItem('lang', lang);
+  applyLanguage(lang);
+}
+
+function applyLanguage(lang) {
+  document.documentElement.lang = lang;
+
+  globalLanguage = lang;
+
+  const t = translations[lang];
+  document.getElementById('title').innerHTML = t.title;
+  document.getElementById('intro').innerHTML = t.intro;
+  document.getElementById('countdownTitle').innerHTML = t.countdownTitle;
+  document.getElementById('formTitle').innerHTML = t.formTitle;
+  document.getElementById('locationLabel').innerHTML = t.location;
+  document.getElementById('dateLabel').innerHTML = t.date;
+  if (dayHasCome() || isTestEnv()) {
+    // change future updates text
+    document.getElementById('futureUpdates').innerHTML = t.formRevealed;
+  } else {
+    document.getElementById('futureUpdates').innerHTML = t.futureUpdates;
+  }
+  document.getElementById('addHomeTitle').innerHTML = t.addHomeTitle;
+  document.getElementById('addHomeIntro').innerHTML = t.addHomeIntro;
+  document.getElementById('iosSteps').innerHTML = t.iosSteps;
+  document.getElementById('androidSteps').innerHTML = t.androidSteps;
+  document.getElementById('signatureText').innerHTML = t.signature;
+  document.getElementById('btnLocation').innerHTML = t.btnLocation;
+  document.getElementById('btnDate').innerHTML = t.btnDate;
+  document.getElementById('btnGift').innerHTML = t.btnGift;
+  document.getElementById('tagAdvice').innerHTML = t.tagAdvice;
+  document.getElementById('shareOnInstagram').innerHTML = t.shareOnInstagram;
+  document.getElementById('wedshootsBtn').innerHTML = t.wedshoots_btn;
+  document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
+  document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
+  document.getElementById('timeline').innerHTML = t.timeline;
+  document.getElementById('navWedshoots').innerHTML = t.navWedshoots;
+  if (document.getElementById('navGift')) {
+    document.getElementById('navGift').innerHTML = t.navGift;
+  }
+
+  if (document.getElementById('footerText')) {
+    document.getElementById('footerText').innerHTML = t.footer;
+  }
+
+  const videoSource = document.getElementById('videoSource');
+  var videoPath = 'assets/';
+
+  videoSource.src = videoPath + (lang === 'en' ? 'video-en.mp4' : 'video-it.mp4');
+
+  let offset = 1; // secondi prima della fine
+  const video = document.getElementById('weddingVideo');
+  video.load();
+  video.play();
+  if (isTestEnv()) {
+    video.playbackRate = 4.0;
+  }
+  const wrapper = document.querySelector('.video-wrapper');
+  video.onended = null;
+  video.ontimeupdate = null;
+  
+  document.body.classList.add('lock-scroll');
+  wrapper.classList.add('fullscreen');
+  
+  video.ontimeupdate = () => {
+    if (dayHasCome() || isTestEnv()) {
+        offset = video.duration && !isNaN(video.duration) && JSON.parse(JSON.stringify(video.duration)) - 3;
+    }
+
+    if (video.duration && video.currentTime >= video.duration - offset) {
+      video.pause();
+      video.currentTime = video.duration - offset;
+
+      /* UNLOCK SCROLL */
+      document.body.classList.remove('lock-scroll');
+      wrapper.classList.remove('fullscreen');
+
+      /* reveal navbar now that video left fullscreen */
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        navbar.classList.remove('hidden');
+      }
+
+      /* TOOLTIP */
+      document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
+      
+      if (document.getElementById('footerText') && !document.getElementById('footerText').innerHTML) {
+        document.getElementById('footerText').innerHTML = t.footer;
+      }
+    }
+  };
+}
+
+/* ================== LINKS ================== */
+function openMaps() {
+  window.open("https://maps.app.goo.gl/duaGwvAzbdR5dpmy7?g_st=ic", "_blank");
+}
+
+function addToCalendar() {
+  const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+
+  if (isApple) {
+    // Apple Calendar
+    window.location.href = "wedding.ics";
+  } else {
+    // Google Calendar
+    window.open(
+      "https://www.google.com/calendar/render?action=TEMPLATE" +
+      "&text=Wedding" +
+      "&dates=20260611T143000/20260612T010000" +
+      "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
+      "_blank"
+    );
+  }
+}
+
+function openGift() {
+  if (window.innerWidth < 768) {
+    document.getElementById('giftSheet').classList.add('active');
+
+    document.getElementById('ibanText').innerText = translations[globalLanguage].iban;
+    document.getElementById('copyHintIBAN').innerHTML = translations[globalLanguage].copy;
+    document.getElementById('nameText').innerHTML = translations[globalLanguage].name;
+    document.getElementById('copyHintName').innerHTML = translations[globalLanguage].copy;
+    document.getElementById('closeButton').innerHTML = translations[globalLanguage].closeButton;
+  } else {
+    window.location.href = "gift.html";
+  }
+}
+
+function closeGiftSheet() {
+  const sheet = document.getElementById('giftSheet');
+
+  sheet.classList.add('closing');
+  sheet.querySelector('.sheet-content').style.transform = '';
+
+  setTimeout(() => {
+    sheet.classList.remove('active', 'closing');
+  }, 350);
+}
+
+function copyIBAN() {
+    const text = document.getElementById('ibanText').innerText;
+
+    navigator.clipboard.writeText(text.replace(' ', '').replace('IBAN:', ''));
+
+    const hint = document.getElementById('copyHintIBAN');
+    hint.innerHTML = globalLanguage === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+    setTimeout(() => {
+        hint.innerHTML = globalLanguage === 'it'
+            ? 'Tocca per copiare'
+            : 'Tap to copy';
+    }, 2000);
+}
+
+function copyName() {
+    const text = document.getElementById('nameText').innerText;
+
+    navigator.clipboard.writeText((globalLanguage === 'it') ? text.replace('INTESTATARIO:\n', '') : text.replace('ACCOUNT HOLDER:\n', ''));
+
+    const hint = document.getElementById('copyHintName');
+    hint.innerHTML = globalLanguage === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+    setTimeout(() => {
+        hint.innerHTML = globalLanguage === 'it'
+            ? 'Tocca per copiare'
+            : 'Tap to copy';
+    }, 2000);
+}
+
+/* ================== COUNTDOWN ================== */
+const weddingDate = new Date("2026-06-11T14:30:00+02:00"); // Europe/Rome (DST)
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = weddingDate - now;
+
+  if (diff <= 0) return;
+
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+
+  document.getElementById("countdown").innerHTML = `
+    <div>${d}<br>${document.documentElement.lang === 'it' ? 'Giorni' : 'Days'}</div>
+    <div>${h}<br>${document.documentElement.lang === 'it' ? 'Ore' : 'Hours'}</div>
+    <div>${m}<br>Min</div>
+    <div>${s}<br>Sec</div>
+  `;
+
+  activateWeddingFeatures();
+}
+
+countDownForm();
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* INIT */
+applyLanguage(detectLanguage());
+
+/* Wait till the video fade out */
+setTimeout(() => {
+    dragDownGiftHandler();
+    animationHandlerByID("footer");
+    animationHandlerByID("info-buttons");
+}, 350);
+
+/* drag down del gift sheet */
+function dragDownGiftHandler() {
+  let startY = 0;
+    let currentY = 0;
+    let dragging = false;
+
+    const sheet = document.getElementById('giftSheet');
+    const sheetContent = sheet.querySelector('.sheet-content');
+    const handle = sheet.querySelector('.sheet-handle');
+
+    handle.addEventListener('touchstart', e => {
+      if (!sheet.classList.contains('active')) return;
+
+      startY = e.touches[0].clientY;
+      dragging = true;
+    });
+
+    handle.addEventListener('touchmove', e => {
+      if (!dragging || !sheet.classList.contains('active')) return;
+
+      currentY = e.touches[0].clientY;
+      const diff = currentY - startY;
+
+      if (diff > 0) {
+        sheetContent.style.transform = `translateY(${diff}px)`;
+      }
+    });
+
+    handle.addEventListener('touchend', () => {
+      if (!dragging) return;
+
+      dragging = false;
+      const diff = currentY - startY;
+
+      if (diff > 120) {
+        closeGiftSheet();
+      } else {
+        sheetContent.style.transform = `translateY(0)`;
+      }
+
+      startY = currentY = 0;
+    });
+}
+
+/* observer bidirezionale per animazioni */
+function animationHandlerByID(elementID) {
+  const element = document.getElementById(elementID);
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        element.classList.add("visible");
+        element.classList.remove("fade-out-down");
+      } else {
+        element.classList.remove("visible");
+        element.classList.add("fade-out-down");
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  observer.observe(element);
+}
+
+function vibrateOnReveal() {
+  if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) && "vibrate" in navigator) {
+    navigator.vibrate([200, 100, 200]);
+  }
+}
+
+function activateWeddingFeatures() {
+  const now = new Date();
+
+  if ((now >= weddingDate) || isTestEnv()) {
+    const navTimeline = document.getElementById("navTimeline");
+    const btnTimeline = document.getElementById("btn-timeline");
+    const igSection = document.getElementById("instagramShare");
+    const gallery = document.getElementById("hashtagGallery");
+    igSection.classList.remove("hidden");
+    gallery.classList.remove("hidden");
+    btnTimeline.classList.remove("hidden");
+    navTimeline.classList.remove("hidden");
+    vibrateOnReveal();
+    AOS.refresh();
+  }
+}
+
+function countDownForm() {
+  // hiding form after deadline (30 May 2026, 14:30 Europe/Rome time)
+  const formEndingDate = new Date("2026-05-30T14:30:00+02:00"); // Europe/Rome (DST)
+  const now = new Date();
+  if ((now >= formEndingDate) || isTestEnv()) {
+    const moduleForm = document.getElementById("moduleForm");
+    moduleForm.style.display = "none";
+    const formTitle = document.getElementById('formTitle');
+    formTitle.style.display = "none";
+    const intro = document.getElementById('intro');
+    intro.style.display = "none";
+  }
+}
+
+const shareData = {
+  title: translations[globalLanguage].signature,
+  text: translations[globalLanguage].title,
+  url: window.location.href // L'URL della pagina corrente
+}
+
+async function addToHome() {
+  // Controlla se il browser supporta la Web Share API
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.log('Errore o condivisione annullata:', err);
+    }
+  }
+}
+
+function onClickShareAPhoto() {
+  navigator.clipboard.writeText("IT218643e8");
+  const wedshootsUrl = "https://www.matrimonio.com/web/W9094403/wedshoots-8";
+
+  if ("vibrate" in navigator) {
+    navigator.vibrate([150, 80, 150]);
+  }
+
+  window.open(wedshootsUrl, "_blank");
+}
+
+function isTestEnv() {
+  return window.location.href.includes('test');
+}
+
+function dayHasCome() {
+  const now = new Date();
+  return now >= weddingDate;
+}
+
+const navToggle = document.getElementById("navToggle");
+const navLinks = document.getElementById("navLinks");
+
+navToggle.addEventListener("click", () => {
+  const opened = navLinks.classList.toggle("open");
+  navToggle.classList.toggle('active');
+  navToggle.setAttribute('aria-expanded', opened);
+});
+
+document.querySelectorAll(".nav-link").forEach(link => {
+  if (link.href === window.location.href) {
+    link.style.fontWeight = "600";
+  }
+});
+
+</script>
+<script src="assets/js/photo-share.js"></script>
+
+
+<div id="giftSheet">
+  <div class="sheet-content">
+    <div class="sheet-handle"></div>
+    <h2 id="giftTitle"></h2>
+    <p id="giftText"></p>
+
+    
+    <div class="name" onclick="copyName()">
+        <span id="nameText"></span><br>
+        <small id="copyHintName"></small>
+    </div>
+    <div class="iban" onclick="copyIBAN()">
+      <span id="ibanText"></span><br>
+      <small id="copyHintIBAN"></small>
+    </div>
+
+    <button id="closeButton" onclick="closeGiftSheet()"></button>
+  </div>
+</div>
+
+<footer class="site-footer fade-in-up" id="footer">
+  <p id="footerText"></p>
+</footer>
+
+</body>
+</html>

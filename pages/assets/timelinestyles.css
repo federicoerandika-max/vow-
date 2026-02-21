@@ -1,0 +1,14 @@
+.container { max-width: 900px; margin: 0 auto; padding: 16px; }
+.topbar { padding: 16px; border-bottom: 1px solid #eee; }
+.subtitle { opacity: .8; margin-top: 6px; }
+.now-card { padding: 12px 14px; border: 1px solid #eee; border-radius: 12px; }
+.now-label { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+.now-event { font-size: 18px; margin-top: 6px; }
+.next-event { margin-top: 6px; opacity: .8; }
+
+.timeline { display: grid; gap: 10px; margin-top: 12px; }
+.tl-item { display: grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 12px; border: 1px solid #eee; border-radius: 12px; }
+.tl-time { font-variant-numeric: tabular-nums; opacity: .9; }
+.tl-title { font-weight: 600; }
+.tl-desc { opacity: .85; margin-top: 4px; }
+.tl-item.is-now { border-color: #111; box-shadow: 0 0 0 2px rgba(0,0,0,.06); }

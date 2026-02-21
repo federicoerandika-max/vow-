@@ -1,0 +1,409 @@
+[data-aos] {
+  transition-property: transform, opacity;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #faf7f4;
+  color: #333;
+  text-align: center;
+}
+
+h1, h2 {
+  font-family: 'Playfair Display', serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.lang-switch {
+  margin-bottom: 15px;
+}
+
+.lang-switch button {
+  border: none;
+  background: white;
+  padding: 8px 14px;
+  margin: 0 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.video-wrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+video {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.tooltip {
+  position: absolute;
+  background: rgba(255,255,255,0.95);
+  padding: 12px 18px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  display: none;
+  animation: fadeIn 1s ease forwards;
+}
+
+.tooltip.location {
+  top: 8%;
+  left: 5%;
+}
+
+.tooltip.date {
+  bottom: 8%;
+  right: 5%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.countdown div {
+  background: white;
+  padding: 15px;
+  border-radius: 14px;
+  min-width: 70px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+iframe {
+  width: 100%;
+  min-height: 900px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 30px;
+}
+
+@media (max-width: 600px) {
+  .tooltip.location { top: 10%; left: 5%; }
+  .tooltip.date { bottom: 10%; right: 5%; }
+  .countdown {
+    gap: 10px;
+  }
+  
+  .countdown div {
+    padding: 12px;
+    min-width: 60px;
+    font-size: 14px;
+  }
+}
+
+#intro {
+  max-width: 700px;
+  margin: auto;
+  font-size: 16px;
+}
+
+#addToHome, #iosSteps, #androidSteps {
+  font-size: 13px;
+  padding: 5%;
+}
+
+#signature {
+  margin-top: 40px;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #444;
+  opacity: 0.9;
+}
+
+#signature::before {
+  content: "— ";
+}
+
+#signature::after {
+  content: " —";
+}
+
+@media (max-width: 600px) {
+  #signature {
+    font-size: 22px;
+  }
+  
+  iframe {
+    min-height: 1980px;
+  }
+}
+
+body.lock-scroll {
+  overflow: hidden;
+}
+
+.video-wrapper.fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  border-radius: 0;
+}
+
+.video-wrapper.fullscreen video {
+  height: 100vh;
+  object-fit: contain;
+  background: white;
+  border-radius: 0;
+}
+
+.info-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin: 40px 0;
+}
+
+.info-buttons button {
+  border: none;
+  background: white;
+  padding: 14px 22px;
+  border-radius: 30px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+@keyframes videoExit {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+}
+
+.video-wrapper.exit {
+  animation: videoExit 1s ease forwards;
+}
+
+.iban, .name {
+    margin: 25px 0;
+    padding: 20px;
+    border-radius: 16px;
+    background: #f6f3f0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+}
+
+.iban:active, .name:active {
+    transform: scale(0.97);
+    background: #ece7e2;
+}
+
+a {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    background: #fff;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#giftSheet {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  z-index: 2000;
+}
+
+#giftSheet.active {
+  display: block;
+}
+
+.sheet-content {
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  background: #faf7f4;
+  border-radius: 24px 24px 0 0;
+  padding: 30px 20px;
+  animation: slideUp .4s ease;
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 5px;
+  background: #ccc;
+  border-radius: 10px;
+  margin: 0 auto 15px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+button#closeButton {
+  background: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid white;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.sheet-content {
+  transition: transform 0.35s ease;
+  touch-action: none;
+}
+
+#giftSheet.closing .sheet-content {
+  transform: translateY(100%);
+}
+
+.sheet-handle {
+  animation: handlePulse 2s infinite;
+}
+
+@keyframes handlePulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+#giftSheet {
+  pointer-events: none;
+}
+
+#giftSheet.active {
+  pointer-events: auto;
+}
+
+.site-footer {
+  margin-top: 80px;
+  padding: 30px 20px;
+  background: #f3eee9;
+  color: #666;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.site-footer strong {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: #333;
+}
+
+.site-footer p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all .6s ease;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-out-down {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Timeline styles */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  margin: 14px 0;
+  text-align: left;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.muted {
+  opacity: .8;
+}
+
+.now-title {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.now-event {
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  margin: 4px 0;
+}
+
+.timeline {
+  display: grid;
+  gap: 10px;
+}
+
+.tl-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.tl-time {
+  font-variant-numeric: tabular-nums;
+  opacity: .85;
+}
+
+.tl-title {
+  font-weight: 600;
+}
+
+.tl-desc {
+  opacity: .85;
+  margin-top: 4px;
+}
+
+.tl-row.is-now {
+  border-color: rgba(0,0,0,0.45);
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.04) inset;
+}
+
+.back {
+  display: inline-block;
+  margin: 12px 0 20px;
+  text-decoration: none;
+  color: #333;
+  opacity: .85;
+}
+
+/* Additional styles from separate CSS files are included inline above */

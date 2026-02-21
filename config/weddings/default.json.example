@@ -1,0 +1,48 @@
+{
+  "couple": {
+    "names": ["Erandika", "Federico"],
+    "weddingDate": "2026-06-11T14:30:00+02:00",
+    "location": {
+      "name": "Giardini la Pergola",
+      "address": "Via Dazio 35, Alessandria",
+      "mapsUrl": "https://maps.app.goo.gl/duaGwvAzbdR5dpmy7?g_st=ic"
+    },
+    "gift": {
+      "iban": "IT78 L030 6909 4831 0000 001 1214",
+      "accountHolder": "HARIN FEDERICO ATTYGALA"
+    },
+    "formUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true",
+    "formEndingDate": "2026-05-30T14:30:00+02:00",
+    "hashtag": "#ErandikaFedericoWedding2026",
+    "instagram": {
+      "bride": "@erandikaconthrath",
+      "groom": "@harinfederico"
+    },
+    "videos": {
+      "it": "/assets/video-it.mp4",
+      "en": "/assets/video-en.mp4"
+    },
+    "timeline": [
+      { "start": "15:25", "end": "15:40", "key": "takeSeat" },
+      { "start": "16:22", "end": "16:57", "key": "ceremony" },
+      { "start": "17:02", "end": "17:12", "key": "lamp" },
+      { "start": "17:30", "end": "18:30", "key": "aperitif" },
+      { "start": "18:30", "end": "18:45", "key": "room" },
+      { "start": "18:45", "end": "21:00", "key": "dinner" },
+      { "start": "19:15", "end": "19:35", "key": "speeches" },
+      { "start": "21:10", "end": "21:25", "key": "cake" },
+      { "start": "21:25", "end": "22:00", "key": "sweets" },
+      { "start": "22:00", "end": "01:00", "key": "party" }
+    ],
+    "wedshoots": {
+      "code": "IT218643e8",
+      "url": "https://www.matrimonio.com/web/W9094403/wedshoots-8"
+    },
+    "calendarIcs": "/wedding.ics"
+  },
+  "metadata": {
+    "siteName": "Wedding Day 💍",
+    "ogImage": "https://federicoerandika-max.github.io/weddingDay/preview.jpg",
+    "ogUrl": "https://federicoerandika-max.github.io/weddingDay-test"
+  }
+}

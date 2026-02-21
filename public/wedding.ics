@@ -1,0 +1,13 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Erandika & Federico//Wedding//EN
+BEGIN:VEVENT
+UID:wedding-20260611@erandikafederico
+DTSTAMP:20260201T120000Z
+DTSTART:20260611T123000Z
+DTEND:20260612T000000Z
+SUMMARY:Wedding – Erandika & Federico
+LOCATION:Giardini la Pergola, Via Dazio 35, Alessandria
+DESCRIPTION:We can’t wait to celebrate together 💍
+END:VEVENT
+END:VCALENDAR

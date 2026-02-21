@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Day — Programma</title>
+
+  <!-- Riusa gli stessi font/CSS del tuo index -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/future-updates.css">
+  <link rel="stylesheet" href="assets/css/photo-share.css">
+  <link rel="stylesheet" href="assets/css/gallery.css">
+  <link rel="stylesheet" href="assets/timelinestyles.css">
+
+  <!-- Se nel tuo index hai CSS inline, puoi duplicare solo le classi che ti servono.
+       Qui tengo uno stile minimo che si integra bene col tuo look (sfondo, card, bottoni). -->
+  <style>
+    body { margin:0; font-family: Montserrat, sans-serif; background:#faf7f4; color:#333; text-align:center; }
+    h1, h2 { font-family: "Playfair Display", serif; }
+    .container { max-width: 900px; margin:auto; padding: 20px; }
+    .lang-switch { margin-bottom: 15px; }
+    .lang-switch button { border:none; background:white; padding:8px 14px; margin:0 5px; border-radius:20px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    a.back { display:inline-block; margin: 12px 0 20px; text-decoration:none; color:#333; opacity:.85; }
+
+    .card { background: white; border-radius: 18px; padding: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); margin: 14px 0; text-align:left; }
+    .card h2 { margin: 0 0 10px; text-align:center; }
+    .muted { opacity: .8; }
+    .now-title { font-weight: 500; margin-bottom: 6px; }
+    .now-event { font-family:"Playfair Display", serif; font-size: 22px; margin: 4px 0; }
+
+    .timeline { display:grid; gap:10px; }
+    .tl-row { display:grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 12px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.08); }
+    .tl-time { font-variant-numeric: tabular-nums; opacity:.85; }
+    .tl-title { font-weight: 600; }
+    .tl-desc { opacity:.85; margin-top:4px; }
+    .tl-row.is-now { border-color: rgba(0,0,0,0.45); box-shadow: 0 0 0 2px rgba(0,0,0,0.04) inset; }
+
+    .site-footer { margin-top: 60px; padding: 30px 20px; background:#f3eee9; color:#666; font-size: .9rem; border-top: 1px solid rgba(0,0,0,0.05); }
+    .site-footer strong { font-family:"Playfair Display", serif; font-weight:600; color:#333; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- LANGUAGE SWITCH (stesso pattern del tuo index) -->
+    <div class="lang-switch">
+      <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+      <button onclick="setLanguage('en')">🇬🇧 English</button>
+    </div>
+
+    <a class="back" href="../index.html" id="backHome"></a>
+
+    <h1 id="programTitle"></h1>
+    <p id="programIntro" class="muted" style="line-height:1.6; max-width:700px; margin: 10px auto 24px;"></p>
+
+    <div class="card">
+      <div class="now-title" id="nowLabel"></div>
+      <div class="now-event" id="nowEvent">—</div>
+      <div class="muted" id="nextEvent"></div>
+    </div>
+
+    <div class="card">
+      <h2 id="timelineTitle"></h2>
+      <div id="timeline" class="timeline"></div>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <p id="footerText"></p>
+  </footer>
+
+  <script>
+    // TRANSLATIONS (stesso oggetto/struttura del tuo index) [file:47]
+    const translations = {
+      it: {
+        programTitle: "Programma della giornata",
+        programIntro: "Qui trovi una timeline semplice per sapere sempre cosa sta succedendo (orari indicativi).",
+        backHome: "← Home",
+        nowLabel: "Adesso",
+        nextPrefix: "Prossimo:",
+        timelineTitle: "Timeline",
+        footer: "2026 — Sito realizzato con amore da<br><strong>Federico Erandika</strong>",
+
+        // Titoli eventi
+        e_takeSeat: "Prendere posto",
+        e_takeSeat_d: "Ci accomodiamo: la cerimonia sta per iniziare.",
+        e_ceremony: "Cerimonia",
+        e_ceremony_d: "Inizio cerimonia; al termine breve momento foto.",
+        e_lamp: "Momento simbolico (lampada)",
+        e_lamp_d: "Un breve rito di benvenuto e buon auspicio.",
+        e_aperitif: "Aperitivo",
+        e_aperitif_d: "Relax, brindisi e chiacchiere.",
+        e_room: "Ingresso in sala",
+        e_room_d: "Invito a prendere posto; breve ingresso degli sposi.",
+        e_dinner: "Cena",
+        e_dinner_d: "Servizio a tavola.",
+        e_speeches: "Discorsi & brindisi",
+        e_speeches_d: "Un momento dedicato durante la cena.",
+        e_cake: "Taglio torta",
+        e_cake_d: "Foto e torta!",
+        e_sweets: "Dolci & caffè",
+        e_sweets_d: "Transizione verso la festa.",
+        e_party: "Festa & open bar",
+        e_party_d: "Pista aperta!"
+      },
+      en: {
+        programTitle: "Day schedule",
+        programIntro: "A simple timeline to always know what’s happening (approx. times).",
+        backHome: "← Home",
+        nowLabel: "Now",
+        nextPrefix: "Next:",
+        timelineTitle: "Timeline",
+        footer: "2026 — Website lovingly crafted by<br><strong>Federico Erandika</strong>",
+
+        e_takeSeat: "Take your seats",
+        e_takeSeat_d: "Please get seated: the ceremony is about to begin.",
+        e_ceremony: "Ceremony",
+        e_ceremony_d: "Ceremony begins; a short photo moment follows.",
+        e_lamp: "Symbolic moment (oil lamp)",
+        e_lamp_d: "A short welcome and blessing moment.",
+        e_aperitif: "Aperitif",
+        e_aperitif_d: "Relax, cheers, and chats.",
+        e_room: "Guests seated + couple entrance",
+        e_room_d: "Please take your seats; short couple entrance.",
+        e_dinner: "Dinner",
+        e_dinner_d: "Table service.",
+        e_speeches: "Speeches & toast",
+        e_speeches_d: "A dedicated moment during dinner.",
+        e_cake: "Cake cutting",
+        e_cake_d: "Photos and cake!",
+        e_sweets: "Desserts & coffee",
+        e_sweets_d: "Transition into the party.",
+        e_party: "Party & open bar",
+        e_party_d: "Dance floor is open!"
+      }
+    };
+
+    // STESSA logica lingua del tuo index (localStorage 'lang', detectLanguage, applyLanguage, setLanguage) [file:47]
+    let globalLanguage;
+
+    function detectLanguage() {
+      const saved = localStorage.getItem('lang');
+      if (saved) return saved;
+      const browserLang = navigator.language || navigator.userLanguage;
+      return browserLang && browserLang.startsWith('en') ? 'en' : 'it';
+    }
+
+    function setLanguage(lang) {
+      localStorage.setItem('lang', lang);
+      applyLanguage(lang);
+      renderTimeline();   // aggiorna anche titoli/desc eventi
+      updateNow();        // e i testi "Now/Next"
+    }
+
+    // Orari “puliti” dal CSV: solo ciò che serve agli invitati. [file:31]
+    const scheduleBase = [
+      { start: "15:25", end: "15:40", key: "takeSeat" },
+      { start: "16:22", end: "16:57", key: "ceremony" },
+      { start: "17:02", end: "17:12", key: "lamp" },
+      { start: "17:30", end: "18:30", key: "aperitif" },
+      { start: "18:30", end: "18:45", key: "room" },
+      { start: "18:45", end: "21:00", key: "dinner" },
+      { start: "19:15", end: "19:35", key: "speeches" },
+      { start: "21:10", end: "21:25", key: "cake" },
+      { start: "21:25", end: "22:00", key: "sweets" },
+      { start: "22:00", end: "01:00", key: "party" }
+    ];
+
+    function toMin(hhmm) {
+      const [h,m] = hhmm.split(":").map(Number);
+      return h*60 + m;
+    }
+
+    function range(e) { return `${e.start}–${e.end}`; }
+
+    function getScheduleLocalized() {
+      const t = translations[globalLanguage];
+      const map = {
+        takeSeat: { title: t.e_takeSeat, desc: t.e_takeSeat_d },
+        ceremony: { title: t.e_ceremony, desc: t.e_ceremony_d },
+        lamp: { title: t.e_lamp, desc: t.e_lamp_d },
+        aperitif: { title: t.e_aperitif, desc: t.e_aperitif_d },
+        room: { title: t.e_room, desc: t.e_room_d },
+        dinner: { title: t.e_dinner, desc: t.e_dinner_d },
+        speeches: { title: t.e_speeches, desc: t.e_speeches_d },
+        cake: { title: t.e_cake, desc: t.e_cake_d },
+        sweets: { title: t.e_sweets, desc: t.e_sweets_d },
+        party: { title: t.e_party, desc: t.e_party_d },
+      };
+
+      return scheduleBase.map(e => ({
+        ...e,
+        title: map[e.key].title,
+        desc: map[e.key].desc
+      }));
+    }
+
+    function applyLanguage(lang) {
+      document.documentElement.lang = lang;
+      globalLanguage = lang;
+
+      const t = translations[lang];
+      document.getElementById('programTitle').innerHTML = t.programTitle;
+      document.getElementById('programIntro').innerHTML = t.programIntro;
+      document.getElementById('backHome').innerHTML = t.backHome;
+      document.getElementById('nowLabel').innerHTML = t.nowLabel;
+      document.getElementById('timelineTitle').innerHTML = t.timelineTitle;
+      document.getElementById('footerText').innerHTML = t.footer;
+    }
+
+    function renderTimeline() {
+      const schedule = getScheduleLocalized();
+      const el = document.getElementById("timeline");
+      el.innerHTML = schedule.map((e,i)=>`
+        <div class="tl-row" data-i="${i}">
+          <div class="tl-time">${range(e)}</div>
+          <div>
+            <div class="tl-title">${e.title}</div>
+            <div class="tl-desc">${e.desc}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function updateNow() {
+      const schedule = getScheduleLocalized();
+      const now = new Date();
+      const mn = now.getHours()*60 + now.getMinutes();
+
+      let current = null;
+      let next = null;
+
+      for (const e of schedule) {
+        const s = toMin(e.start);
+        const en = toMin(e.end);
+        if (mn >= s && mn <= en) current = e;
+        if (mn < s && !next) next = e;
+      }
+
+      document.getElementById("nowEvent").textContent =
+        current ? `${current.title} (${range(current)})` : (globalLanguage === 'it' ? "In attesa del prossimo momento" : "Waiting for the next moment");
+
+      const t = translations[globalLanguage];
+      document.getElementById("nextEvent").textContent =
+        next ? `${t.nextPrefix} ${next.title} — ${next.start}` : (globalLanguage === 'it' ? "Prossimo: fine festa" : "Next: end of party");
+
+      document.querySelectorAll(".tl-row").forEach(row => row.classList.remove("is-now"));
+      if (current) {
+        const idx = schedule.findIndex(x => x.key === current.key && x.start === current.start);
+        const row = document.querySelector(`.tl-row[data-i="${idx}"]`);
+        if (row) row.classList.add("is-now");
+      }
+    }
+
+    // INIT (stesso pattern: applyLanguage(detectLanguage())) [file:47]
+    applyLanguage(detectLanguage());
+    renderTimeline();
+    updateNow();
+    setInterval(updateNow, 30000);
+  </script>
+</body>
+</html>

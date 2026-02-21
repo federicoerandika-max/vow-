@@ -1,0 +1,51 @@
+.future-updates {
+  margin: 50px auto 20px;
+  padding: 28px 24px;
+  max-width: 700px;
+  background: linear-gradient(135deg, #ffffff, #f7f2ec);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.future-updates .future-icon {
+  font-size: 1.6rem;
+  display: inline-block;
+  margin-bottom: 10px;
+  animation: sparkle 2.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.future-updates p {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #444;
+}
+
+
+/* WEBSHOOT button */
+.action-btn {
+  margin: 30px auto 10px;
+  padding: 16px 28px;
+  font-size: 1.05rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f76c6f, #f78b6c);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(247,139,108,1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.action-btn:active {
+  transform: scale(0.96);
+}
+
+.btn-timeline.hidden {
+  display: none;
+}

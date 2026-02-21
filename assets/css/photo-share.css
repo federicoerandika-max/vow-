@@ -1,0 +1,33 @@
+.instagram-share {
+  margin: 40px auto 20px;
+  text-align: center;
+}
+
+.instagram-share.hidden {
+  display: none;
+}
+
+.share-text {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.ig-button {
+  padding: 14px 28px;
+  font-size: 1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ig-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.2);
+}
