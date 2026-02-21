@@ -652,7 +652,7 @@ export default function AdminPage() {
         {/* Header */}
         <div style={S.header}>
           <div>
-            <h1 style={{ fontSize: 24, fontWeight: 700, margin: 0 }}>💒 Vow Admin</h1>
+            <h1 style={{ fontSize: 24, fontWeight: 700, margin: 0 }}><img src="/assets/img/vowlogo.png" alt="Vow" className="nav-logo-img" /> Vow Admin</h1>
             <p style={{ color: '#6b7280', fontSize: 13, margin: '4px 0 0' }}>
               Editing: <strong>{selectedConfig}</strong>
             </p>
