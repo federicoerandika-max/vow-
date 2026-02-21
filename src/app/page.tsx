@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { WeddingConfig } from '@/types/wedding';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/config/translations';
@@ -22,6 +22,35 @@ export default function HomePage() {
   const [videoEnded, setVideoEnded] = useState(false);
   const [showVideo, setShowVideo] = useState(true);
   const [giftSheetOpen, setGiftSheetOpen] = useState(false);
+  const [langSwitchFlash, setLangSwitchFlash] = useState(false);
+  const langVideoRef = useRef<HTMLVideoElement>(null);
+
+  const triggerLangVideoFlash = () => {
+    if (!config || !videoEnded) return; // Only flash if user already saw the video
+    setLangSwitchFlash(true);
+    // Lock scroll during flash
+    document.body.classList.add('lock-scroll');
+  };
+
+  // Handle the flash video lifecycle
+  useEffect(() => {
+    if (!langSwitchFlash || !config) return;
+    const video = langVideoRef.current;
+    if (!video) return;
+
+    // Set source to current language video
+    video.src = config.couple.videos[language];
+    video.currentTime = 1;
+    video.play().catch(console.error);
+
+    const timeout = setTimeout(() => {
+      video.pause();
+      setLangSwitchFlash(false);
+      document.body.classList.remove('lock-scroll');
+    }, 1500);
+
+    return () => clearTimeout(timeout);
+  }, [langSwitchFlash, config, language]);
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -59,12 +88,9 @@ export default function HomePage() {
       setGiftSheetOpen(true);
     };
 
-    // Listener per il cambio lingua
-    const handleLanguageChange = (e: Event) => {
-      const customEvent = e as CustomEvent<typeof language>;
-      if (customEvent.detail) {
-        setLanguage(customEvent.detail);
-      }
+    // Listener per il cambio lingua (solo per il video flash)
+    const handleLanguageChange = () => {
+      triggerLangVideoFlash();
     };
 
     loadConfig();
@@ -173,6 +199,15 @@ export default function HomePage() {
           ></p>
         </footer>
       </AnimateOnScroll>
+
+      {/* Language switch fullscreen video flash */}
+      <div className={`lang-video-flash ${langSwitchFlash ? 'active' : ''}`}>
+        <video
+          ref={langVideoRef}
+          muted
+          playsInline
+        />
+      </div>
     </>
   );
 }

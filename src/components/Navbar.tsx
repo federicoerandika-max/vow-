@@ -40,12 +40,12 @@ export default function Navbar({ config, videoSkipped = false }: NavbarProps) {
           {coupleNames}
         </Link>
         <button
-          className="nav-toggle"
+          className={`nav-toggle ${isOpen ? 'active' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Menu"
           aria-expanded={isOpen}
         >
-          ☰
+          {isOpen ? '✕' : '☰'}
         </button>
       </div>
       <nav className={`nav-links ${isOpen ? 'open' : ''}`}>

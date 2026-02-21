@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/config/translations';
 import { WeddingConfig } from '@/types/wedding';
@@ -17,6 +17,52 @@ export default function GiftSheet({ config, isOpen, onClose }: GiftSheetProps) {
   const [ibanCopied, setIbanCopied] = useState(false);
   const [nameCopied, setNameCopied] = useState(false);
   const t = translations[language];
+
+  // Drag-down state
+  const sheetContentRef = useRef<HTMLDivElement>(null);
+  const startYRef = useRef(0);
+  const currentYRef = useRef(0);
+  const draggingRef = useRef(false);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    startYRef.current = e.touches[0].clientY;
+    currentYRef.current = e.touches[0].clientY;
+    draggingRef.current = true;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!draggingRef.current) return;
+    currentYRef.current = e.touches[0].clientY;
+    const diff = currentYRef.current - startYRef.current;
+    if (diff > 0 && sheetContentRef.current) {
+      sheetContentRef.current.style.transform = `translateY(${diff}px)`;
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    const diff = currentYRef.current - startYRef.current;
+    if (diff > 120) {
+      // Close with animation
+      if (sheetContentRef.current) {
+        sheetContentRef.current.style.transform = 'translateY(100%)';
+      }
+      setTimeout(() => {
+        if (sheetContentRef.current) {
+          sheetContentRef.current.style.transform = '';
+        }
+        onClose();
+      }, 350);
+    } else {
+      // Snap back
+      if (sheetContentRef.current) {
+        sheetContentRef.current.style.transform = 'translateY(0)';
+      }
+    }
+    startYRef.current = 0;
+    currentYRef.current = 0;
+  }, [onClose]);
 
   if (!isOpen) return null;
 
@@ -46,8 +92,14 @@ export default function GiftSheet({ config, isOpen, onClose }: GiftSheetProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="sheet-content">
-        <div className="sheet-handle" onClick={onClose}></div>
+      <div className="sheet-content" ref={sheetContentRef}>
+        <div
+          className="sheet-handle"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onClick={onClose}
+        ></div>
         <h2>{t.giftTitle as string}</h2>
         <p dangerouslySetInnerHTML={{ __html: t.giftText as string }}></p>
 

@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="it">
+    <html lang="it" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap"
@@ -21,7 +21,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href="/assets/img/wedding-logo.png" />
         <link rel="apple-touch-icon" href="/assets/img/wedding-logo.png" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
       </body>
     </html>
