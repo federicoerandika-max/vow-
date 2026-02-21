@@ -1,5 +1,5 @@
 import { WeddingConfig } from '@/types/wedding';
-import defaultConfig from '../../config/weddings/default.json';
+import defaultConfig from './default-wedding.json';
 
 // Server-side only functions
 export function getWeddingConfig(coupleId: string = 'default'): WeddingConfig {
