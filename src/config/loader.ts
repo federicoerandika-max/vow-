@@ -1,23 +1,15 @@
 import { WeddingConfig } from '@/types/wedding';
-import fs from 'fs';
-import path from 'path';
-
-const CONFIG_DIR = path.join(process.cwd(), 'config', 'weddings');
+import defaultConfig from '../../config/weddings/default.json';
 
 // Server-side only functions
 export function getWeddingConfig(coupleId: string = 'default'): WeddingConfig {
-  if (typeof window !== 'undefined') {
-    throw new Error('getWeddingConfig can only be called server-side');
+  // For now, only default config is supported via static import
+  // This ensures the config is bundled with the serverless function on Vercel
+  if (coupleId !== 'default') {
+    throw new Error(`Configuration not found for coupleId: ${coupleId}`);
   }
 
-  const configPath = path.join(CONFIG_DIR, `${coupleId}.json`);
-  
-  if (!fs.existsSync(configPath)) {
-    throw new Error(`Configuration file not found: ${configPath}`);
-  }
-
-  const configContent = fs.readFileSync(configPath, 'utf-8');
-  const config: WeddingConfig = JSON.parse(configContent);
+  const config = defaultConfig as WeddingConfig;
 
   // Validazione base
   if (!config.couple) {
@@ -28,29 +20,10 @@ export function getWeddingConfig(coupleId: string = 'default'): WeddingConfig {
 }
 
 export function getAllWeddingConfigs(): string[] {
-  if (typeof window !== 'undefined') {
-    return [];
-  }
-
-  if (!fs.existsSync(CONFIG_DIR)) {
-    return [];
-  }
-
-  const files = fs.readdirSync(CONFIG_DIR);
-  return files
-    .filter(file => file.endsWith('.json') && file !== 'default.json.example')
-    .map(file => file.replace('.json', ''));
+  return ['default'];
 }
 
 export function saveWeddingConfig(coupleId: string, config: WeddingConfig): void {
-  if (typeof window !== 'undefined') {
-    throw new Error('saveWeddingConfig can only be called server-side');
-  }
-
-  if (!fs.existsSync(CONFIG_DIR)) {
-    fs.mkdirSync(CONFIG_DIR, { recursive: true });
-  }
-
-  const configPath = path.join(CONFIG_DIR, `${coupleId}.json`);
-  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+  // Saving is not supported on Vercel's read-only filesystem
+  throw new Error('Saving configuration is not supported in this deployment');
 }
