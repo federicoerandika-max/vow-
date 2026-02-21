@@ -14,7 +14,7 @@
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "aos": "^2.3.4",
+    "framer-motion": "^10.16.16",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2"
   },
@@ -24,7 +24,6 @@
     "@types/react-dom": "^18.2.18",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/aos": "^3.0.7",
     "typescript": "^5.3.3",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4"

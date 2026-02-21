@@ -4,6 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/config/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface InstagramShareProps {
   config: WeddingConfig;
@@ -40,29 +41,31 @@ export default function InstagramShare({ config }: InstagramShareProps) {
   };
 
   return (
-    <div id="instagramShare" className="instagram-share" data-aos="zoom-in">
-      <p style={{ marginTop: '12px', fontSize: '0.85rem', opacity: 0.7 }}>
-        {t.tagAdvice as string}{' '}
-        <strong id="tagEra">{config.couple.instagram.bride}</strong> e{' '}
-        <strong id="tagFede">{config.couple.instagram.groom}</strong>
-      </p>
+    <AnimateOnScroll animation="zoom-in">
+      <div id="instagramShare" className="instagram-share">
+        <p style={{ marginTop: '12px', fontSize: '0.85rem', opacity: 0.7 }}>
+          {t.tagAdvice as string}{' '}
+          <strong id="tagEra">{config.couple.instagram.bride}</strong> e{' '}
+          <strong id="tagFede">{config.couple.instagram.groom}</strong>
+        </p>
 
-      <button className="ig-button" onClick={openInstagram}>
-        {t.shareOnInstagram as string}
-      </button>
-      <br />
-      {config.couple.wedshoots && (
-        <>
-          <button
-            id="wedshootsBtn"
-            className="action-btn"
-            onClick={onClickShareAPhoto}
-          >
-            <span dangerouslySetInnerHTML={{ __html: t.wedshoots_btn as string }}></span>
-          </button>
-          <br />
-        </>
-      )}
-    </div>
+        <button className="ig-button" onClick={openInstagram}>
+          {t.shareOnInstagram as string}
+        </button>
+        <br />
+        {config.couple.wedshoots && (
+          <>
+            <button
+              id="wedshootsBtn"
+              className="action-btn"
+              onClick={onClickShareAPhoto}
+            >
+              <span dangerouslySetInnerHTML={{ __html: t.wedshoots_btn as string }}></span>
+            </button>
+            <br />
+          </>
+        )}
+      </div>
+    </AnimateOnScroll>
   );
 }

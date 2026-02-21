@@ -5,6 +5,7 @@ import { translations } from '@/config/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 import Link from 'next/link';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface InfoButtonsProps {
   config: WeddingConfig;
@@ -43,44 +44,46 @@ export default function InfoButtons({ config }: InfoButtonsProps) {
   };
 
   return (
-    <div className="info-buttons fade-in-up" id="info-buttons">
-      {showTimeline && (
-        <div className="btn-timeline">
-          <button onClick={() => window.location.href = '/timeline'}>
-            <span>{t.timeline as string}</span>
-          </button>
-          <br />
-        </div>
-      )}
-      <button onClick={openMaps}>
-        📍 <span>{t.btnLocation as string}</span>
-      </button>
-      <button onClick={addToCalendar}>
-        <img
-          src="/assets/img/june-11-calendar.png"
-          alt="calendar icon"
-          width="50"
-          height="50"
-          style={{
-            border: 'none',
-            margin: '-13px',
-            position: 'relative',
-            top: '4px',
-          }}
-        />{' '}
-        <span>{t.btnDate as string}</span>
-      </button>
-      <button onClick={() => {
-        if (window.innerWidth < 768) {
-          // Open gift sheet on mobile
-          const event = new CustomEvent('openGiftSheet');
-          window.dispatchEvent(event);
-        } else {
-          window.location.href = '/gift';
-        }
-      }}>
-        🎁 <span>{t.btnGift as string}</span>
-      </button>
-    </div>
+    <AnimateOnScroll animation="fade-up" className="info-buttons-wrapper">
+      <div className="info-buttons" id="info-buttons">
+        {showTimeline && (
+          <div className="btn-timeline">
+            <button onClick={() => window.location.href = '/timeline'}>
+              <span>{t.timeline as string}</span>
+            </button>
+            <br />
+          </div>
+        )}
+        <button onClick={openMaps}>
+          📍 <span>{t.btnLocation as string}</span>
+        </button>
+        <button onClick={addToCalendar}>
+          <img
+            src="/assets/img/june-11-calendar.png"
+            alt="calendar icon"
+            width="50"
+            height="50"
+            style={{
+              border: 'none',
+              margin: '-13px',
+              position: 'relative',
+              top: '4px',
+            }}
+          />{' '}
+          <span>{t.btnDate as string}</span>
+        </button>
+        <button onClick={() => {
+          if (window.innerWidth < 768) {
+            // Open gift sheet on mobile
+            const event = new CustomEvent('openGiftSheet');
+            window.dispatchEvent(event);
+          } else {
+            window.location.href = '/gift';
+          }
+        }}>
+          🎁 <span>{t.btnGift as string}</span>
+        </button>
+      </div>
+    </AnimateOnScroll>
   );
 }

@@ -36,7 +36,7 @@ export default function Navbar({ config, videoSkipped = false }: NavbarProps) {
   return (
     <header className={`navbar ${isVisible ? '' : 'hidden'}`}>
       <div className="nav-container">
-        <Link href="/" className="nav-logo">
+        <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)}>
           {coupleNames}
         </Link>
         <button
@@ -49,23 +49,26 @@ export default function Navbar({ config, videoSkipped = false }: NavbarProps) {
         </button>
       </div>
       <nav className={`nav-links ${isOpen ? 'open' : ''}`}>
-        <Link href="/" className="nav-link">
+        <Link href="/" className="nav-link" onClick={() => setIsOpen(false)}>
           Home
         </Link>
         {showTimeline && (
-          <Link href="/timeline" className="nav-link navTimeline">
-            Timeline
+          <Link href="/timeline" className="nav-link navTimeline" onClick={() => setIsOpen(false)}>
+            {t.timeline as string}
           </Link>
         )}
-        <Link href="/gift" className="nav-link">
+        <Link href="/gift" className="nav-link" onClick={() => setIsOpen(false)}>
           {t.navGift as string}
         </Link>
         {config.couple.wedshoots && (
           <a
             href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1"
             className="nav-link last"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsOpen(false)}
           >
-            {t.navWedshoots as string}
+            <span dangerouslySetInnerHTML={{ __html: t.navWedshoots as string }}></span>
           </a>
         )}
       </nav>

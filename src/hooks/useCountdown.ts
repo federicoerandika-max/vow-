@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface Countdown {
   days: number;
@@ -17,10 +17,13 @@ export function useCountdown(targetDate: Date): Countdown {
     isPast: false,
   });
 
+  // Memorizza il timestamp per evitare re-render infiniti
+  const targetTimestamp = useMemo(() => targetDate.getTime(), [targetDate]);
+
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      const diff = targetDate.getTime() - now.getTime();
+      const diff = targetTimestamp - now.getTime();
 
       if (diff <= 0) {
         setCountdown({
@@ -30,7 +33,7 @@ export function useCountdown(targetDate: Date): Countdown {
           seconds: 0,
           isPast: true,
         });
-        return;
+        return; // Continua a mostrare 0 ma non aggiornare più
       }
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -51,7 +54,7 @@ export function useCountdown(targetDate: Date): Countdown {
     const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
-  }, [targetDate]);
+  }, [targetTimestamp]); // Usa il timestamp memorizzato invece dell'oggetto Date
 
   return countdown;
 }

@@ -14,10 +14,11 @@ import RSVPForm from '@/components/RSVPForm';
 import InstagramShare from '@/components/InstagramShare';
 import InfoButtons from '@/components/InfoButtons';
 import GiftSheet from '@/components/GiftSheet';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 export default function HomePage() {
   const [config, setConfig] = useState<WeddingConfig | null>(null);
-  const [language] = useLanguage();
+  const [language, setLanguage] = useLanguage();
   const [videoEnded, setVideoEnded] = useState(false);
   const [showVideo, setShowVideo] = useState(true);
   const [giftSheetOpen, setGiftSheetOpen] = useState(false);
@@ -58,13 +59,23 @@ export default function HomePage() {
       setGiftSheetOpen(true);
     };
 
+    // Listener per il cambio lingua
+    const handleLanguageChange = (e: Event) => {
+      const customEvent = e as CustomEvent<typeof language>;
+      if (customEvent.detail) {
+        setLanguage(customEvent.detail);
+      }
+    };
+
     loadConfig();
     window.addEventListener('openGiftSheet', handleOpenGiftSheet);
+    window.addEventListener('languagechange', handleLanguageChange);
     
     return () => {
       window.removeEventListener('openGiftSheet', handleOpenGiftSheet);
+      window.removeEventListener('languagechange', handleLanguageChange);
     };
-  }, []);
+  }, [setLanguage]);
 
   if (!config) {
     return <div>Loading...</div>;
@@ -104,47 +115,44 @@ export default function HomePage() {
           {videoEnded && <VideoTooltips config={config} />}
         </div>
 
-        <h2 id="countdownTitle" data-aos="fade-up">
-          {t.countdownTitle as string}
-        </h2>
+        <AnimateOnScroll animation="fade-up">
+          <h2 id="countdownTitle">
+            {t.countdownTitle as string}
+          </h2>
+        </AnimateOnScroll>
         <Countdown config={config} language={language} />
 
-        <p
-          id="intro"
-          style={{ marginTop: '30px', lineHeight: '1.7' }}
-          data-aos="fade-up"
-          data-aos-delay="150"
-          dangerouslySetInnerHTML={{ __html: t.intro as string }}
-        ></p>
+        <AnimateOnScroll animation="fade-up" delay={150}>
+          <p
+            id="intro"
+            style={{ marginTop: '30px', lineHeight: '1.7', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}
+            dangerouslySetInnerHTML={{ __html: t.intro as string }}
+          ></p>
+        </AnimateOnScroll>
 
         <br />
         <br />
-        <div
-          id="signature"
-          data-aos="fade-up"
-          data-aos-anchor="#formTitle"
-          data-aos-delay="300"
-        >
-          <span id="signatureText">
-            {config.couple.names.join(' & ')}
-          </span>
-        </div>
+        <AnimateOnScroll animation="fade-up" delay={300}>
+          <div id="signature">
+            <span id="signatureText">
+              {config.couple.names.join(' & ')}
+            </span>
+          </div>
+        </AnimateOnScroll>
 
         <RSVPForm config={config} />
 
         <br />
-        <div
-          className="future-updates"
-          data-aos="fade-up"
-          data-aos-delay="150"
-        >
-          <span className="future-icon">✨</span>
-          <p id="futureUpdates">
-            {showFutureUpdates
-              ? (t.futureUpdates as string)
-              : (t.formRevealed as string)}
-          </p>
-        </div>
+        <AnimateOnScroll animation="fade-up" delay={150}>
+          <div className="future-updates">
+            <span className="future-icon">✨</span>
+            <p id="futureUpdates">
+              {showFutureUpdates
+                ? (t.futureUpdates as string)
+                : (t.formRevealed as string)}
+            </p>
+          </div>
+        </AnimateOnScroll>
 
         <InstagramShare config={config} />
 
@@ -157,12 +165,14 @@ export default function HomePage() {
         onClose={() => setGiftSheetOpen(false)}
       />
 
-      <footer className="site-footer fade-in-up visible" id="footer">
-        <p
-          id="footerText"
-          dangerouslySetInnerHTML={{ __html: t.footer as string }}
-        ></p>
-      </footer>
+      <AnimateOnScroll animation="fade-up">
+        <footer className="site-footer" id="footer">
+          <p
+            id="footerText"
+            dangerouslySetInnerHTML={{ __html: t.footer as string }}
+          ></p>
+        </footer>
+      </AnimateOnScroll>
     </>
   );
 }

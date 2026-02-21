@@ -4,6 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/config/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { shouldShowForm, isTestEnv } from '@/utils/dateUtils';
+import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface RSVPFormProps {
   config: WeddingConfig;
@@ -18,9 +19,11 @@ export default function RSVPForm({ config }: RSVPFormProps) {
 
   return (
     <>
-      <h2 id="formTitle" data-aos="fade-up">
-        {t.formTitle as string}
-      </h2>
+      <AnimateOnScroll animation="fade-up">
+        <h2 id="formTitle">
+          {t.formTitle as string}
+        </h2>
+      </AnimateOnScroll>
       <div id="moduleForm">
         <iframe
           src={config.couple.formUrl}
