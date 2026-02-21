@@ -18,11 +18,15 @@ export default function VideoTooltips({ config }: VideoTooltipsProps) {
 
   const addToCalendar = () => {
     const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
     const weddingDate = new Date(config.couple.weddingDate);
+    const coupleNames = config.couple.names.join(' & ');
     
-    if (isApple) {
+    if (isApple || isAndroid) {
+      // Mobile devices: download .ics file (both iOS and Android handle it natively)
       window.location.href = config.couple.calendarIcs || '/wedding.ics';
     } else {
+      // Desktop / Windows: open Google Calendar
       const startDate = weddingDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
       const endDate = new Date(weddingDate.getTime() + 10 * 60 * 60 * 1000)
         .toISOString()
@@ -31,9 +35,10 @@ export default function VideoTooltips({ config }: VideoTooltipsProps) {
       
       window.open(
         `https://www.google.com/calendar/render?action=TEMPLATE` +
-        `&text=Wedding` +
+        `&text=${encodeURIComponent('Wedding – ' + coupleNames)}` +
         `&dates=${startDate}/${endDate}` +
-        `&location=${encodeURIComponent(config.couple.location.address)}`,
+        `&details=${encodeURIComponent("We can't wait to celebrate together 💍")}` +
+        `&location=${encodeURIComponent(config.couple.location.name + ', ' + config.couple.location.address)}`,
         '_blank'
       );
     }
