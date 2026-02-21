@@ -25,7 +25,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const configs = getAllWeddingConfigs();
+    const configs = await getAllWeddingConfigs();
     return NextResponse.json({ configs });
   } catch (error) {
     console.error('Error listing configs:', error);

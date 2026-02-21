@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { WeddingConfig } from '@/types/wedding';
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 import LanguageSwitch from '@/components/LanguageSwitch';
 import Navbar from '@/components/Navbar';
@@ -67,13 +67,6 @@ export default function HomePage() {
             if (videoSeen === 'true') {
               setShowVideo(false);
               setVideoEnded(true);
-              // Mostra navbar e tooltip subito se video già visto
-              setTimeout(() => {
-                const navbar = document.querySelector('.navbar');
-                if (navbar) {
-                  navbar.classList.remove('hidden');
-                }
-              }, 100);
             }
           }
         } else {
@@ -107,7 +100,7 @@ export default function HomePage() {
     return <div>Loading...</div>;
   }
 
-  const t = translations[language];
+  const T = getMergedTranslations(language, config);
   const showFutureUpdates = !dayHasCome(new Date(config.couple.weddingDate)) && !isTestEnv();
 
   return (
@@ -116,7 +109,7 @@ export default function HomePage() {
       <div className="container">
         <LanguageSwitch />
 
-        <h1 id="title">{t.title as string}</h1>
+        <h1 id="title">{T.title as string}</h1>
 
         <div className="video-wrapper">
           <VideoPlayer
@@ -143,7 +136,7 @@ export default function HomePage() {
 
         <AnimateOnScroll animation="fade-up">
           <h2 id="countdownTitle">
-            {t.countdownTitle as string}
+            {T.countdownTitle as string}
           </h2>
         </AnimateOnScroll>
         <Countdown config={config} language={language} />
@@ -152,7 +145,7 @@ export default function HomePage() {
           <p
             id="intro"
             style={{ marginTop: '30px', lineHeight: '1.7', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}
-            dangerouslySetInnerHTML={{ __html: t.intro as string }}
+            dangerouslySetInnerHTML={{ __html: T.intro as string }}
           ></p>
         </AnimateOnScroll>
 
@@ -174,8 +167,8 @@ export default function HomePage() {
             <span className="future-icon">✨</span>
             <p id="futureUpdates">
               {showFutureUpdates
-                ? (t.futureUpdates as string)
-                : (t.formRevealed as string)}
+                ? (T.futureUpdates as string)
+                : (T.formRevealed as string)}
             </p>
           </div>
         </AnimateOnScroll>
@@ -195,7 +188,7 @@ export default function HomePage() {
         <footer className="site-footer" id="footer">
           <p
             id="footerText"
-            dangerouslySetInnerHTML={{ __html: t.footer as string }}
+            dangerouslySetInnerHTML={{ __html: T.footer as string }}
           ></p>
         </footer>
       </AnimateOnScroll>

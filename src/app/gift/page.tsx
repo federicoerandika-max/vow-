@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { copyToClipboard } from '@/utils/clipboard';
 
@@ -12,7 +12,7 @@ export default function GiftPage() {
   const [config, setConfig] = useState<WeddingConfig | null>(null);
   const [ibanCopied, setIbanCopied] = useState(false);
   const [nameCopied, setNameCopied] = useState(false);
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
 
   useEffect(() => {
     fetch('/api/config')

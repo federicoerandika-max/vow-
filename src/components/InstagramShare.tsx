@@ -1,7 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
@@ -12,7 +12,7 @@ interface InstagramShareProps {
 
 export default function InstagramShare({ config }: InstagramShareProps) {
   const [language] = useLanguage();
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
   const show = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
 
   if (!show) return null;

@@ -5,9 +5,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-// Hash pre-generato per password "admin" (usare npm run generate-password per generarne uno nuovo)
-const DEFAULT_ADMIN_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || DEFAULT_ADMIN_HASH;
+// Read plain-text admin password from env, or default to 'admin'
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin';
 
 export async function POST(request: Request) {
   try {
@@ -21,17 +20,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verifica password
-    let isValid = false;
-    try {
-      isValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
-    } catch (bcryptError) {
-      console.error('Bcrypt error:', bcryptError);
-      // Fallback: se bcrypt fallisce, prova con password semplice per sviluppo
-      if (process.env.NODE_ENV === 'development' && password === 'admin') {
-        isValid = true;
-      }
-    }
+    // Verifica password con confronto diretto
+    const isValid = password === ADMIN_PASSWORD;
     
     if (!isValid) {
       return NextResponse.json(

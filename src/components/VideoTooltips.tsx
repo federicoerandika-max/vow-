@@ -1,7 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
 
 interface VideoTooltipsProps {
@@ -10,7 +10,7 @@ interface VideoTooltipsProps {
 
 export default function VideoTooltips({ config }: VideoTooltipsProps) {
   const [language] = useLanguage();
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
 
   const openMaps = () => {
     window.open(config.couple.location.mapsUrl, '_blank');

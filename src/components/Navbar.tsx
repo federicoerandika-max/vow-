@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 
@@ -16,17 +16,12 @@ export default function Navbar({ config, videoSkipped = false }: NavbarProps) {
   const [language] = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(videoSkipped);
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
 
   useEffect(() => {
-    // Navbar diventa visibile dopo il video (o subito se video saltato)
+    // Navbar only becomes visible when the video has ended / been skipped
     if (videoSkipped) {
       setIsVisible(true);
-    } else {
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 2000);
-      return () => clearTimeout(timer);
     }
   }, [videoSkipped]);
 

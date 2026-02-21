@@ -1,7 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ interface InfoButtonsProps {
 
 export default function InfoButtons({ config }: InfoButtonsProps) {
   const [language] = useLanguage();
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
   const showTimeline = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
 
   const openMaps = () => {

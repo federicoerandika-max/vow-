@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
 import { copyToClipboard } from '@/utils/clipboard';
 
@@ -16,7 +16,7 @@ export default function GiftSheet({ config, isOpen, onClose }: GiftSheetProps) {
   const [language] = useLanguage();
   const [ibanCopied, setIbanCopied] = useState(false);
   const [nameCopied, setNameCopied] = useState(false);
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
 
   // Drag-down state
   const sheetContentRef = useRef<HTMLDivElement>(null);

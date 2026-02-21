@@ -25,6 +25,11 @@ export interface TimelineEvent {
   key: string;
 }
 
+export interface WedShoots {
+  code: string;
+  url: string;
+}
+
 export interface Couple {
   names: [string, string];
   weddingDate: string;
@@ -36,19 +41,22 @@ export interface Couple {
   instagram: Instagram;
   videos: Videos;
   timeline?: TimelineEvent[];
-  wedshoots?: {
-    code: string;
-    url: string;
-  };
+  wedshoots?: WedShoots;
   calendarIcs?: string;
+}
+
+export interface Metadata {
+  siteName?: string;
+  ogImage?: string;
+  ogUrl?: string;
 }
 
 export interface WeddingConfig {
   couple: Couple;
-  metadata?: {
-    siteName?: string;
-    ogImage?: string;
-    ogUrl?: string;
+  metadata?: Metadata;
+  customTranslations?: {
+    it?: Record<string, string>;
+    en?: Record<string, string>;
   };
 }
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/hooks/useLanguage';
-import { translations } from '@/config/translations';
+import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig, TimelineEvent } from '@/types/wedding';
 import { parseTime, formatTimeRange } from '@/utils/dateUtils';
 import LanguageSwitch from '@/components/LanguageSwitch';
@@ -13,7 +13,7 @@ export default function TimelinePage() {
   const [config, setConfig] = useState<WeddingConfig | null>(null);
   const [currentEvent, setCurrentEvent] = useState<TimelineEvent | null>(null);
   const [nextEvent, setNextEvent] = useState<TimelineEvent | null>(null);
-  const t = translations[language];
+  const t = getMergedTranslations(language, config);
 
   useEffect(() => {
     fetch('/api/config')
