@@ -3,6 +3,8 @@ import { saveWeddingConfig } from '@/config/loader';
 import { WeddingConfig } from '@/types/wedding';
 import jwt from 'jsonwebtoken';
 
+export const dynamic = 'force-dynamic';
+
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 function verifyAuth(request: Request): boolean {

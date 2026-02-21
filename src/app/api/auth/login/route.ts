@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
+export const dynamic = 'force-dynamic';
+
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 // Hash pre-generato per password "admin" (usare npm run generate-password per generarne uno nuovo)
 const DEFAULT_ADMIN_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
