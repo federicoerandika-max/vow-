@@ -1,4 +1,4 @@
-# Wedding Day - Sito Matrimonio Configurabile
+# Vow - Sito Matrimonio Configurabile
 
 Sito web per partecipazioni/inviti matrimoniali completamente configurabile, costruito con Next.js e TypeScript.
 
