@@ -125,6 +125,7 @@ export default function WeddingClient({ coupleSlug }: WeddingClientProps) {
 
   const T = getMergedTranslations(language, config);
   const showFutureUpdates = !dayHasCome(new Date(config.couple.weddingDate)) && !isTestEnv();
+  const weddingDay = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
 
   return (
     <>
@@ -161,13 +162,15 @@ export default function WeddingClient({ coupleSlug }: WeddingClientProps) {
         </AnimateOnScroll>
         <Countdown config={config} language={language} />
 
-        <AnimateOnScroll animation="fade-up" delay={150}>
-          <p
-            id="intro"
-            style={{ marginTop: '30px', lineHeight: '1.7', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}
-            dangerouslySetInnerHTML={{ __html: T.intro as string }}
-          ></p>
-        </AnimateOnScroll>
+        {!weddingDay && (
+          <AnimateOnScroll animation="fade-up" delay={150}>
+            <p
+              id="intro"
+              style={{ marginTop: '30px', lineHeight: '1.7', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}
+              dangerouslySetInnerHTML={{ __html: T.intro as string }}
+            ></p>
+          </AnimateOnScroll>
+        )}
 
         <br /><br />
         <AnimateOnScroll animation="fade-up" delay={300}>

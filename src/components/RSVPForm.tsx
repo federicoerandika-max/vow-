@@ -3,7 +3,7 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
-import { shouldShowForm, isTestEnv } from '@/utils/dateUtils';
+import { shouldShowForm } from '@/utils/dateUtils';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 
 interface RSVPFormProps {
@@ -13,7 +13,7 @@ interface RSVPFormProps {
 export default function RSVPForm({ config }: RSVPFormProps) {
   const [language] = useLanguage();
   const t = getMergedTranslations(language, config);
-  const showForm = shouldShowForm(config.couple.formEndingDate) || isTestEnv();
+  const showForm = shouldShowForm(config.couple.formEndingDate);
 
   if (!showForm) return null;
 

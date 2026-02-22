@@ -15,6 +15,7 @@ export default function InfoButtons({ config }: InfoButtonsProps) {
   const [language] = useLanguage();
   const t = getMergedTranslations(language, config);
   const showTimeline = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
+  const hideSaveDate = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
 
   const openMaps = () => {
     window.open(config.couple.location.mapsUrl, '_blank');
@@ -62,21 +63,23 @@ export default function InfoButtons({ config }: InfoButtonsProps) {
         <button onClick={openMaps}>
           📍 <span>{t.btnLocation as string}</span>
         </button>
-        <button onClick={addToCalendar}>
-          <img
-            src="/assets/img/june-11-calendar.png"
-            alt="calendar icon"
-            width="50"
-            height="50"
-            style={{
-              border: 'none',
-              margin: '-13px',
-              position: 'relative',
-              top: '4px',
-            }}
-          />{' '}
-          <span>{t.btnDate as string}</span>
-        </button>
+        {!hideSaveDate && (
+          <button onClick={addToCalendar}>
+            <img
+              src="/assets/img/june-11-calendar.png"
+              alt="calendar icon"
+              width="50"
+              height="50"
+              style={{
+                border: 'none',
+                margin: '-13px',
+                position: 'relative',
+                top: '4px',
+              }}
+            />{' '}
+            <span>{t.btnDate as string}</span>
+          </button>
+        )}
         <button onClick={() => {
           if (window.innerWidth < 768) {
             // Open gift sheet on mobile

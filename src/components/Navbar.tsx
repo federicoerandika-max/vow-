@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { WeddingConfig } from '@/types/wedding';
 import { getMergedTranslations } from '@/utils/translations';
-import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
+import { dayHasCome, isTestEnv, shouldShowForm } from '@/utils/dateUtils';
 
 interface NavbarProps {
   videoSkipped: boolean;
@@ -29,7 +29,13 @@ export default function Navbar({ videoSkipped, config }: NavbarProps) {
     setIsOpen(false);
     if (action === 'gift') {
       // Open the gift sheet overlay
-      window.dispatchEvent(new CustomEvent('openGiftSheet'));
+      if (window.innerWidth < 768) {
+        // Open gift sheet on mobile
+        const event = new CustomEvent('openGiftSheet');
+        window.dispatchEvent(event);
+      } else {
+        window.location.href = '/gift';
+      }
     } else if (action === 'timeline') {
       window.location.href = '/timeline';
     }
@@ -37,10 +43,11 @@ export default function Navbar({ videoSkipped, config }: NavbarProps) {
   };
 
   const postCountdown = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
+  const showRsvp = shouldShowForm(config.couple.formEndingDate);
 
   const navItems = [
     { href: '#countdownTitle', action: 'countdown', icon: '⏳', label: t.navCountdown as string },
-    { href: '#formTitle', action: 'rsvp', icon: '📝', label: t.navRsvp as string },
+    ...(showRsvp ? [{ href: '#formTitle', action: 'rsvp', icon: '📝', label: t.navRsvp as string }] : []),
     ...(postCountdown ? [{ href: '#instagramShare', action: 'instagram', icon: '📸', label: t.navInstagram as string }] : []),
     { href: '#info-buttons', action: 'location', icon: '📍', label: t.navLocation as string },
     ...(postCountdown ? [{ href: '#', action: 'timeline', icon: '🕒', label: t.navTimeline as string }] : []),

@@ -18,10 +18,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const siteName = config.metadata?.siteName || `${coupleNames} – Wedding Day 💍`;
   const description = `Save the date for ${coupleNames}'s wedding!`;
 
-  // Build the canonical URL
+  // Build the canonical URL — always use the Vercel base URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vow-sandy.vercel.app';
   const coupleSlug = config.metadata?.coupleSlug || params.couple;
-  const ogUrl = config.metadata?.ogUrl || `${baseUrl}/vow/${encodeURIComponent(coupleSlug)}`;
+  const ogUrl = `${baseUrl}/vow/${encodeURIComponent(coupleSlug)}`;
 
   const ogImage = config.metadata?.ogImage || `${baseUrl}/assets/img/vowlogo.png`;
 

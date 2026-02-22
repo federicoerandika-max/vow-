@@ -3,6 +3,7 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { getMergedTranslations } from '@/utils/translations';
 import { WeddingConfig } from '@/types/wedding';
+import { dayHasCome, isTestEnv } from '@/utils/dateUtils';
 
 interface VideoTooltipsProps {
   config: WeddingConfig;
@@ -11,6 +12,7 @@ interface VideoTooltipsProps {
 export default function VideoTooltips({ config }: VideoTooltipsProps) {
   const [language] = useLanguage();
   const t = getMergedTranslations(language, config);
+  const hideDate = dayHasCome(new Date(config.couple.weddingDate)) || isTestEnv();
 
   const openMaps = () => {
     window.open(config.couple.location.mapsUrl, '_blank');
@@ -49,21 +51,23 @@ export default function VideoTooltips({ config }: VideoTooltipsProps) {
       <div className="tooltip location" onClick={openMaps} style={{ display: 'block' }}>
         📍 <span id="locationLabel">{t.location as string}</span>
       </div>
-      <div className="tooltip date" onClick={addToCalendar} style={{ display: 'block' }}>
-        <img
-          src="/assets/img/june-11-calendar.png"
-          alt="calendar icon"
-          width="50"
-          height="50"
-          style={{
-            border: 'none',
-            margin: '-13px',
-            position: 'relative',
-            top: '4px',
-          }}
-        />{' '}
-        <span id="dateLabel">{t.date as string}</span>
-      </div>
+      {!hideDate && (
+        <div className="tooltip date" onClick={addToCalendar} style={{ display: 'block' }}>
+          <img
+            src="/assets/img/june-11-calendar.png"
+            alt="calendar icon"
+            width="50"
+            height="50"
+            style={{
+              border: 'none',
+              margin: '-13px',
+              position: 'relative',
+              top: '4px',
+            }}
+          />{' '}
+          <span id="dateLabel">{t.date as string}</span>
+        </div>
+      )}
     </>
   );
 }

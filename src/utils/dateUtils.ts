@@ -12,7 +12,6 @@ export function dayHasCome(weddingDate: Date): boolean {
 
 export function shouldShowForm(formEndingDate?: string): boolean {
   if (!formEndingDate) return true;
-  if (isTestEnv()) return true;
   
   const endingDate = new Date(formEndingDate);
   const now = new Date();

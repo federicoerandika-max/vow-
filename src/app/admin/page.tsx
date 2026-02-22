@@ -562,24 +562,6 @@ export default function AdminPage() {
                 Auto-generate
               </button>
             </div>
-            <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
-              Your wedding URL will be: <strong>/vow/{get('metadata.coupleSlug') || generateCoupleSlug() || 'name1-name2'}</strong>
-            </p>
-          </div>
-
-          {/* OG URL (auto-generated) */}
-          <div style={{ ...S.field, gridColumn: '1 / -1' }}>
-            <label style={S.label}>OG URL (auto-generated from slug)</label>
-            <input
-              type="url"
-              value={get('metadata.ogUrl', '')}
-              onChange={(e) => set('metadata.ogUrl', e.target.value)}
-              placeholder={`https://vow-sandy.vercel.app/vow/${get('metadata.coupleSlug') || generateCoupleSlug()}`}
-              style={S.input}
-            />
-            <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
-              Leave empty to auto-generate from slug. Override only if you have a custom domain.
-            </p>
           </div>
 
           {/* OG Image — URL or Upload */}
@@ -632,34 +614,111 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Preview Card */}
-        {(get('metadata.siteName') || get('metadata.ogImage')) && (
-          <div style={{ marginTop: 16, padding: 16, background: '#f0f9ff', borderRadius: 8, border: '1px solid #bfdbfe' }}>
-            <p style={{ fontSize: 12, color: '#2563eb', fontWeight: 600, marginBottom: 8 }}>📱 Social Preview:</p>
-            <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #e5e7eb', maxWidth: 400, margin: '0 auto', textAlign: 'left' }}>
-              {get('metadata.ogImage') && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={get('metadata.ogImage')}
-                  alt="Social preview"
-                  style={{ width: '100%', height: 200, objectFit: 'cover' }}
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+        {/* Wedding Link with share/copy buttons */}
+        {(() => {
+          const slug = get('metadata.coupleSlug') || generateCoupleSlug();
+          const fullUrl = slug ? `https://vow-sandy.vercel.app/vow/${slug}` : '';
+          return (
+            <div style={{ marginTop: 16, padding: 16, background: '#f0fdf4', borderRadius: 8, border: '1px solid #bbf7d0' }}>
+              <label style={{ ...S.label, marginBottom: 8, display: 'block' }}>🔗 Wedding Link</label>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={fullUrl}
+                  readOnly
+                  style={{ ...S.input, flex: 1, background: '#f9fafb', color: fullUrl ? '#1a1a1a' : '#9ca3af' }}
+                  placeholder="Generate a slug first"
                 />
-              )}
-              <div style={{ padding: 12 }}>
-                <p style={{ fontSize: 11, color: '#9ca3af', margin: 0 }}>
-                  {get('metadata.ogUrl') || `vow-sandy.vercel.app/vow/${get('metadata.coupleSlug') || '...'}`}
-                </p>
-                <p style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a', margin: '4px 0 2px' }}>
-                  {get('metadata.siteName') || 'Wedding Day 💍'}
-                </p>
-                <p style={{ fontSize: 12, color: '#6b7280', margin: 0 }}>
-                  Save the date for {config?.couple?.names?.join(' & ')}&apos;s wedding!
-                </p>
+                <button
+                  type="button"
+                  style={{ ...S.btnSecondary, whiteSpace: 'nowrap' }}
+                  onClick={async () => {
+                    if (!fullUrl) return;
+                    try {
+                      await navigator.clipboard.writeText(fullUrl);
+                      setSuccess('Link copied ✓');
+                      setTimeout(() => setSuccess(null), 2000);
+                    } catch {
+                      const ta = document.createElement('textarea');
+                      ta.value = fullUrl;
+                      ta.style.position = 'fixed';
+                      ta.style.left = '-9999px';
+                      document.body.appendChild(ta);
+                      ta.select();
+                      document.execCommand('copy');
+                      document.body.removeChild(ta);
+                      setSuccess('Link copied ✓');
+                      setTimeout(() => setSuccess(null), 2000);
+                    }
+                  }}
+                  disabled={!fullUrl}
+                >
+                  📋 Copy
+                </button>
+                <button
+                  type="button"
+                  style={{ ...S.btnPrimary, whiteSpace: 'nowrap', padding: '8px 16px', fontSize: 13 }}
+                  onClick={() => {
+                    if (!fullUrl) return;
+                    const coupleNames = config?.couple?.names?.join(' & ') || '';
+                    const shareText = `💍 ${coupleNames}\nSave the date!\n\n${fullUrl}`;
+                    if (navigator.share) {
+                      navigator.share({ title: `${coupleNames} Wedding`, text: shareText, url: fullUrl }).catch(() => {});
+                    } else {
+                      navigator.clipboard.writeText(shareText).then(() => {
+                        setSuccess('Share text copied ✓');
+                        setTimeout(() => setSuccess(null), 2000);
+                      }).catch(() => {});
+                    }
+                  }}
+                  disabled={!fullUrl}
+                >
+                  🔗 Share
+                </button>
+              </div>
+              <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
+                Share this link with guests. It will show the correct OG preview on WhatsApp, Facebook, etc.
+              </p>
+            </div>
+          );
+        })()}
+
+        {/* Preview Card */}
+        {(() => {
+          const slug = get('metadata.coupleSlug') || generateCoupleSlug();
+          const previewUrl = `https://vow-sandy.vercel.app/vow/${slug || '...'}`;
+          const previewTitle = get('metadata.siteName') || `${config?.couple?.names?.join(' & ')} – Wedding Day 💍`;
+          const previewImage = get('metadata.ogImage');
+          const previewDesc = `Save the date for ${config?.couple?.names?.join(' & ')}'s wedding!`;
+
+          return (
+            <div style={{ marginTop: 16, padding: 16, background: '#f0f9ff', borderRadius: 8, border: '1px solid #bfdbfe' }}>
+              <p style={{ fontSize: 12, color: '#2563eb', fontWeight: 600, marginBottom: 8 }}>📱 Social Preview:</p>
+              <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #e5e7eb', maxWidth: 400, margin: '0 auto', textAlign: 'left' }}>
+                {previewImage && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={previewImage}
+                    alt="Social preview"
+                    style={{ width: '100%', height: 200, objectFit: 'cover' }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                )}
+                <div style={{ padding: 12 }}>
+                  <p style={{ fontSize: 11, color: '#9ca3af', margin: 0 }}>
+                    {previewUrl}
+                  </p>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a', margin: '4px 0 2px' }}>
+                    {previewTitle}
+                  </p>
+                  <p style={{ fontSize: 12, color: '#6b7280', margin: 0 }}>
+                    {previewDesc}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
     ),
 
