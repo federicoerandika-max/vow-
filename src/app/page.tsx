@@ -117,7 +117,20 @@ export default function HomePage() {
   }, [config]);
 
   if (!config) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-screen">
+        <div className="loading-content">
+          <img
+            src="/assets/img/vow-logo.png"
+            alt="Vow"
+            className="loading-logo"
+          />
+          <div className="loading-bar-track">
+            <div className="loading-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const T = getMergedTranslations(language, config);

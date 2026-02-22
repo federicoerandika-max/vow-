@@ -54,7 +54,20 @@ export default function TimelinePage() {
   }, [config]);
 
   if (!config || !config.couple.timeline) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-screen">
+        <div className="loading-content">
+          <img
+            src="/assets/img/vow-logo.png"
+            alt="Vow"
+            className="loading-logo"
+          />
+          <div className="loading-bar-track">
+            <div className="loading-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    );;
   }
 
   const getEventTitle = (key: string): string => {
