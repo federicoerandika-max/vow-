@@ -318,7 +318,20 @@ export default function AdminPage() {
     );
   }
 
-  if (!config) return <div style={S.page}>{toasts}<p>Loading configuration…</p></div>;
+  if (!config) return <div style={S.page}>{toasts}(
+      <div className="loading-screen">
+        <div className="loading-content">
+          <img
+            src="/assets/img/vow-logo.png"
+            alt="Vow"
+            className="loading-logo"
+          />
+          <div className="loading-bar-track">
+            <div className="loading-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    )</div>;
 
   /* ── Section renderers ── */
   const renderField = (label: string, path: string, opts?: { type?: string; placeholder?: string; rows?: number; wide?: boolean }) => (
@@ -606,7 +619,7 @@ export default function AdminPage() {
             <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 8 }}>OG Image Preview:</p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={get('metadata.ogImage')}
+              src="/assets/img/vowlogo.png"
               alt="OG preview"
               style={{ maxWidth: '100%', maxHeight: 200, borderRadius: 8, border: '1px solid #e5e7eb' }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
